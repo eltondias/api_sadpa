@@ -12,13 +12,23 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 @Configuration
 public class DataConfiguration {
 
-	@Bean
+	/*@Bean
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/api_sadpa");
         dataSource.setUsername("postgres");
         dataSource.setPassword("postgres");
+        return dataSource;
+    }*/
+	
+	@Bean
+    public DataSource dataSource(){
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://baasu.db.elephantsql.com:5432/iqgyctkx");
+        dataSource.setUsername("iqgyctkx");
+        dataSource.setPassword("v0e2SbqY3k5rauOftWgC9AU0wG8sjL0m");
         return dataSource;
     }
 	
