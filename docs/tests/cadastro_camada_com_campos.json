@@ -1,0 +1,31 @@
+{
+  "nome": "Camada Teste",
+  "descricao": "Nova camada Teste",
+  "situacao": true,
+  "campos": [
+    {
+      "nome": "Campo1",
+      "obrigatorio": true,
+      "tipoCampo": {
+        "idTipoCampo": 1
+      },
+      "titulo": true
+    },
+    {
+      "nome": "Campo2",
+      "obrigatorio": true,
+      "tipoCampo": {
+        "idTipoCampo": 1
+      },
+      "titulo": true
+    },
+    {
+      "nome": "Campo3",
+      "obrigatorio": true,
+      "tipoCampo": {
+        "idTipoCampo": 1
+      },
+      "titulo": true
+    }
+  ]
+}

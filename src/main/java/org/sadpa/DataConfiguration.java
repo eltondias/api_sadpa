@@ -12,7 +12,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 @Configuration
 public class DataConfiguration {
 
-	/*@Bean
+	@Bean
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
@@ -20,9 +20,9 @@ public class DataConfiguration {
         dataSource.setUsername("postgres");
         dataSource.setPassword("postgres");
         return dataSource;
-    }*/
+    }
 	
-	@Bean
+	/*@Bean
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
@@ -30,7 +30,7 @@ public class DataConfiguration {
         dataSource.setUsername("iqgyctkx");
         dataSource.setPassword("v0e2SbqY3k5rauOftWgC9AU0wG8sjL0m");
         return dataSource;
-    }
+    }*/
 	
 	@Bean
 	public JpaVendorAdapter jpaVendorAdapter(){

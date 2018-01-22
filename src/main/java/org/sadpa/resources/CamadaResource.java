@@ -1,7 +1,7 @@
 package org.sadpa.resources;
 import javax.validation.Valid;
 
-import org.sadpa.dto.CamadaDto;
+import org.sadpa.dto.CamadaCadastroDto;
 import org.sadpa.models.Camada;
 import org.sadpa.services.CamadaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +33,9 @@ public class CamadaResource {
 		return service.getCamada(idCamada);
 	}
 		
-	@ApiOperation(value="Salva uma nova camada")
+	@ApiOperation(value="Cadastro uma nova camada e seus campos")
 	@PostMapping()
-	public CamadaDto cadastraCamada(@RequestBody @Valid CamadaDto camada){								
-		return service.postCamada(camada);
+	public CamadaCadastroDto cadastraCamadaCampos(@RequestBody @Valid CamadaCadastroDto camada){								
+		return service.cadastraCamadaCampos(camada);
 	}
 }
