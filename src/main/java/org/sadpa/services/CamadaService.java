@@ -6,10 +6,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
-
 import org.modelmapper.ModelMapper;
 import org.sadpa.dto.CamadaDto;
-import org.sadpa.dto.CamadaDto_off;
 import org.sadpa.dto.CampoDto;
 import org.sadpa.models.Camada;
 import org.sadpa.models.Campo;
@@ -19,7 +17,6 @@ import org.sadpa.repositories.CampoRepository;
 import org.sadpa.repositories.TipoCampoRepository;
 import org.sadpa.resources.CamadaResource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -43,7 +40,7 @@ public class CamadaService {
 		dataAtual.setTimeZone(TimeZone.getTimeZone("America/Belem"));
 	}
 
-	public Iterable<Camada> getAllCamadas() {
+	public Iterable<Camada> listarCamadas() {
 		Iterable<Camada> listaCamadas = camadaRepository.findAll();
 		ArrayList<Camada> camadas = new ArrayList<Camada>();
 		for (Camada camada : listaCamadas) {
@@ -53,7 +50,7 @@ public class CamadaService {
 		return camadas;
 	}
 
-	public CamadaDto getCamada(int idCamada) {
+	public CamadaDto obterCamada(int idCamada) {
 
 		Camada camada = camadaRepository.findByIdCamada(idCamada);
 		List<CampoDto> camposDto = new ArrayList<CampoDto>();
@@ -69,17 +66,12 @@ public class CamadaService {
 		return camadaResponse;
 	}
 
-	public CamadaDto cadastraCamadaCampos(CamadaDto camadaCadastroDto) throws Exception {
+	public CamadaDto cadastrarCamada(CamadaDto camadaCadastroDto) throws Exception {
 
 		try {
+			
 			List<CampoDto> campos = new ArrayList<CampoDto>();
-
-			Camada camada = modelMapper.map(camadaCadastroDto, Camada.class);
-
-			camada.setDataHoraInsercao(dataAtual);
-			camada.setSituacao(true);
-			camadaRepository.save(camada);
-
+			
 			for (CampoDto campoDto : camadaCadastroDto.getCampos()) {
 
 				Campo campo = modelMapper.map(campoDto, Campo.class);
@@ -88,7 +80,15 @@ public class CamadaService {
 				
 				if (tipoCampo == null)
 					throw new Exception("Tipo de campo do campo '" + campo.getNome() + "' não existe");
+			}
+						
+			Camada camada = modelMapper.map(camadaCadastroDto, Camada.class);			
+			camada.setDataHoraInsercao(dataAtual);
+			camada.setSituacao(true);
+			camadaRepository.save(camada);
 
+			for (CampoDto campoDto : camadaCadastroDto.getCampos()) {
+				Campo campo = modelMapper.map(campoDto, Campo.class);
 				campo.setCamada(camada);
 				campoRepository.save(campo);
 				campos.add(modelMapper.map(campo, CampoDto.class));
@@ -109,14 +109,7 @@ public class CamadaService {
 		}
 	}
 
-	public Camada convertToEntity(CamadaDto_off CamadaDto) throws ParseException {
-		Camada Camada = modelMapper.map(CamadaDto, Camada.class);
-		return Camada;
-	}
+ 
 
-	public CamadaDto_off convertToDto(Camada camada) {
-		CamadaDto_off camadaDto = modelMapper.map(camada, CamadaDto_off.class);
-		return camadaDto;
-	}
-
+	 
 }

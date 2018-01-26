@@ -26,19 +26,19 @@ public class CamadaResource {
 	@ApiOperation(value="Retorna uma lista com todas as camadas")
 	@GetMapping(value = "/", produces = "application/json; charset=UTF-8")
 	public @ResponseBody Iterable<Camada> listarCamadas() {			 
-		return service.getAllCamadas();		
+		return service.listarCamadas();		
 	}	
 	
 	@ApiOperation(value="Cadastro uma nova camada e seus campos")
 	@PostMapping()
 	public CamadaDto cadastrarCamada(@RequestBody @Valid CamadaDto camada) throws Exception{								
-		return service.cadastraCamadaCampos(camada);
+		return service.cadastrarCamada(camada);
 	}
 	
 	@ApiOperation(value="Retorna uma camada específica")
 	@GetMapping(value="/{idCamada}", produces="application/json")
 	public @ResponseBody CamadaDto obterCamada(@PathVariable(value="idCamada") int idCamada){		 	 
-		return service.getCamada(idCamada);
+		return service.obterCamada(idCamada);
 	}
 		
 	
