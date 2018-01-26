@@ -2,13 +2,8 @@ package org.sadpa.dto;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
-import org.springframework.hateoas.ResourceSupport;
-
- 
-
-public class CamadaDto extends ResourceSupport{
+public class CamadaDto_off {
 	
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		 
@@ -16,16 +11,9 @@ public class CamadaDto extends ResourceSupport{
 	private String nome;		 
 	private String descricao;		 
 	private Calendar dataHoraInsercao;
-	private boolean situacao;	
-	private List<CampoDto> campos;
-		 
-	public List<CampoDto> getCampos() {
-		return campos;
-	}
-	public void setCampos(List<CampoDto> campos) {
-		this.campos = campos;
-	}
-	public int getIdCamada() {
+	private boolean situacao;
+	
+	public long getIdCamada() {
 		return idCamada;
 	}
 	public void setIdCamada(int idCamada) {
