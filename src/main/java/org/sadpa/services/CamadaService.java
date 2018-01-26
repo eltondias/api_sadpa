@@ -72,14 +72,13 @@ public class CamadaService {
 			
 			List<CampoDto> campos = new ArrayList<CampoDto>();
 			
-			for (CampoDto campoDto : camadaCadastroDto.getCampos()) {
-
-				Campo campo = modelMapper.map(campoDto, Campo.class);
-				TipoCampo tipoCampo = tipoCampoRepository.findByIdTipoCampo(campo.getTipoCampo().getIdTipoCampo());
-				campo.setTipoCampo(tipoCampo);
+			for (CampoDto campoDto : camadaCadastroDto.getCampos()) {			
+				TipoCampo tipoCampo = tipoCampoRepository.findByIdTipoCampo(campoDto.getTipoCampo().getIdTipoCampo());
+				campoDto.setTipoCampo(tipoCampo);
 				
 				if (tipoCampo == null)
-					throw new Exception("Tipo de campo do campo '" + campo.getNome() + "' não existe");
+					throw new Exception("Tipo de campo do campo '" + campoDto.getNome() + "' não existe");
+				else campos.add(campoDto);
 			}
 						
 			Camada camada = modelMapper.map(camadaCadastroDto, Camada.class);			
@@ -87,20 +86,16 @@ public class CamadaService {
 			camada.setSituacao(true);
 			camadaRepository.save(camada);
 
-			for (CampoDto campoDto : camadaCadastroDto.getCampos()) {
-				Campo campo = modelMapper.map(campoDto, Campo.class);
+			for (CampoDto campoDto : campos) {
+				Campo campo = modelMapper.map(campoDto, Campo.class);				 				 
 				campo.setCamada(camada);
-				campoRepository.save(campo);
-				campos.add(modelMapper.map(campo, CampoDto.class));
+				campoRepository.save(campo);				
 			}
 
 			CamadaDto objCamadaCadastroDto = modelMapper.map(camada, CamadaDto.class);
-
-			objCamadaCadastroDto.add(
-					linkTo(methodOn(CamadaResource.class).obterCamada(objCamadaCadastroDto.getIdCamada())).withSelfRel());
-
+			objCamadaCadastroDto.add(linkTo(methodOn(CamadaResource.class).obterCamada(objCamadaCadastroDto.getIdCamada())).withSelfRel());
 			objCamadaCadastroDto.setCampos(campos);
-
+			
 			return objCamadaCadastroDto;
 
 		} catch (Exception e) {
