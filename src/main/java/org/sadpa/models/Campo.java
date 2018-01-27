@@ -1,5 +1,7 @@
 package org.sadpa.models;
 
+import java.util.Calendar;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +21,11 @@ public class Campo{
 	private boolean obrigatorio;
 	
 	private boolean titulo;	
+	
+	private Calendar dataHoraInsercao;
+	
+	private Calendar dataHoraAtualizacao;
+		
 	
 	@NotBlank
 	private String nome;
@@ -78,7 +85,20 @@ public class Campo{
 	public void setTipoCampo(TipoCampo tipoCampo) {
 		this.tipoCampo = tipoCampo;
 	}
-	
-	
-		
+
+	public Calendar getDataHoraInsercao() {
+		return dataHoraInsercao;
+	}
+
+	public void setDataHoraInsercao(Calendar dataHoraInsercao) {
+		this.dataHoraInsercao = dataHoraInsercao;
+	}
+
+	public Calendar getDataHoraAtualizacao() {
+		return dataHoraAtualizacao;
+	}
+
+	public void setDataHoraAtualizacao(Calendar dataHoraAtualizacao) {
+		this.dataHoraAtualizacao = dataHoraAtualizacao;
+	}	
 }

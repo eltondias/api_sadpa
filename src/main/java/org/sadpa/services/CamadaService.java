@@ -7,7 +7,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 import org.modelmapper.ModelMapper;
-import org.sadpa.dto.CamadaDto;
+import org.sadpa.dto.CamadaCreateDto;
+import org.sadpa.dto.CamadaReadDto;
+import org.sadpa.dto.CamadaUpdateDto;
 import org.sadpa.dto.CampoDto;
 import org.sadpa.models.Camada;
 import org.sadpa.models.Campo;
@@ -40,45 +42,17 @@ public class CamadaService {
 		dataAtual.setTimeZone(TimeZone.getTimeZone("America/Belem"));
 	}
 
-	public Iterable<Camada> listarCamadas() {
-		Iterable<Camada> listaCamadas = camadaRepository.findAll();
-		ArrayList<Camada> camadas = new ArrayList<Camada>();
-		for (Camada camada : listaCamadas) {
-			camada.add(linkTo(methodOn(CamadaResource.class).obterCamada(camada.getIdCamada())).withSelfRel());
-			camadas.add(camada);
-		}
-		return camadas;
-	}
-
-	public CamadaDto obterCamada(int idCamada) {
-
-		Camada camada = camadaRepository.findByIdCamada(idCamada);
-		List<CampoDto> camposDto = new ArrayList<CampoDto>();
-		List<Campo> campos = campoRepository.findByCamada(camada);
-		CamadaDto camadaResponse = modelMapper.map(camada, CamadaDto.class);
-
-		for (Campo campo : campos) {
-			camposDto.add(modelMapper.map(campo, CampoDto.class));
-		}
-		camadaResponse.setCampos(camposDto);
-
-		camadaResponse.add(linkTo(methodOn(CamadaResource.class).listarCamadas()).withRel("Lista todas as camadas"));
-		return camadaResponse;
-	}
-
-	public CamadaDto cadastrarCamada(CamadaDto camadaCadastroDto) throws Exception {
+	public CamadaCreateDto cadastrarCamada(CamadaCreateDto camadaCadastroDto) throws Exception {
 
 		try {
 			
 			List<CampoDto> campos = new ArrayList<CampoDto>();
 			
 			for (CampoDto campoDto : camadaCadastroDto.getCampos()) {			
-				TipoCampo tipoCampo = tipoCampoRepository.findByIdTipoCampo(campoDto.getTipoCampo().getIdTipoCampo());
-				campoDto.setTipoCampo(tipoCampo);
-				
+				TipoCampo tipoCampo = tipoCampoRepository.findByIdTipoCampo(campoDto.getTipoCampo().getIdTipoCampo());								
 				if (tipoCampo == null)
 					throw new Exception("Tipo de campo do campo '" + campoDto.getNome() + "' não existe");
-				else campos.add(campoDto);
+				
 			}
 						
 			Camada camada = modelMapper.map(camadaCadastroDto, Camada.class);			
@@ -86,13 +60,17 @@ public class CamadaService {
 			camada.setSituacao(true);
 			camadaRepository.save(camada);
 
-			for (CampoDto campoDto : campos) {
+			for (CampoDto campoDto : camadaCadastroDto.getCampos()) {
 				Campo campo = modelMapper.map(campoDto, Campo.class);				 				 
 				campo.setCamada(camada);
-				campoRepository.save(campo);				
+				campo.setDataHoraInsercao(dataAtual);				
+				campo = campoRepository.save(campo);				
+				campoDto.setIdCampo(campo.getIdCampo());	
+				campoDto.setTipoCampo(tipoCampoRepository.findByIdTipoCampo(campo.getTipoCampo().getIdTipoCampo()));
+				campos.add(campoDto);				
 			}
 
-			CamadaDto objCamadaCadastroDto = modelMapper.map(camada, CamadaDto.class);
+			CamadaCreateDto objCamadaCadastroDto = modelMapper.map(camada, CamadaCreateDto.class);
 			objCamadaCadastroDto.add(linkTo(methodOn(CamadaResource.class).obterCamada(objCamadaCadastroDto.getIdCamada())).withSelfRel());
 			objCamadaCadastroDto.setCampos(campos);
 			
@@ -103,8 +81,101 @@ public class CamadaService {
 			throw new Exception(e.getMessage(), e);
 		}
 	}
+	
+	public CamadaReadDto obterCamada(int idCamada) {
 
- 
+		Camada camada = camadaRepository.findByIdCamada(idCamada);
+		List<CampoDto> camposDto = new ArrayList<CampoDto>();
+		List<Campo> campos = campoRepository.findByCamada(camada);
+		CamadaReadDto camadaResponse = modelMapper.map(camada, CamadaReadDto.class);
+
+		for (Campo campo : campos) 
+			camposDto.add(modelMapper.map(campo, CampoDto.class));
+		
+		camadaResponse.setCampos(camposDto);		
+		return camadaResponse;
+	}
+	
+	public CamadaReadDto atualizarCamada(CamadaUpdateDto camadaUpdateDto) throws Exception {
+		try {			
+			Camada oCamada =   camadaRepository.findByIdCamada(camadaUpdateDto.getIdCamada());
+			
+			oCamada.setDescricao(camadaUpdateDto.getDescricao());
+			oCamada.setNome(camadaUpdateDto.getNome());
+			oCamada.setSituacao(camadaUpdateDto.isSituacao());
+			oCamada.setDataHoraAtualizacao(dataAtual);
+			camadaRepository.save(oCamada);	
+						
+			for (CampoDto campo : camadaUpdateDto.getCampos()) {				
+				
+					Campo  oCampo = campoRepository.findByIdCampo(campo.getIdCampo());		
+								
+					if(oCampo == null) 
+						oCampo = new Campo();
+										
+					oCampo.setCamada(oCamada);
+					oCampo.setNome(campo.getNome());
+					oCampo.setObrigatorio(campo.isObrigatorio());
+					oCampo.setTipoCampo(campo.getTipoCampo());
+					oCampo.setTitulo(campo.isTitulo());		
+					oCampo.setDataHoraAtualizacao(dataAtual);
+					
+				 	campoRepository.save(oCampo);						 			 
+			}
+			
+			CamadaReadDto camadaResponse = modelMapper.map(oCamada, CamadaReadDto.class);			
+			camadaResponse.setCampos(camadaUpdateDto.getCampos());
+						
+			return camadaResponse;
+
+		} catch (Exception e) {
+
+			throw new Exception(e.getMessage(), e);
+		}
+	}
+
+	public CamadaReadDto excluirCamada(int idCamada) {
+		Camada camada = camadaRepository.findByIdCamada(idCamada);
+		camada.setSituacao(false);		
+		camada.setDataHoraExclusao(dataAtual);
+		camadaRepository.save(camada);		
+		return modelMapper.map(camada, CamadaReadDto.class);			 
+	}
+	
+	public Iterable<CamadaReadDto> listarCamadas() {
+				
+		Iterable<Camada> listaCamadas = camadaRepository.findBySituacao(true);
+				
+		ArrayList<CamadaReadDto> camadas = new ArrayList<CamadaReadDto>();
+		
+		for (Camada camada : listaCamadas) {			
+			 List<Campo> campos = campoRepository.findByCamada(camada);
+			 List<CampoDto> camposDto = new ArrayList<CampoDto>();
+			 for (Campo campo :campos) 				 
+				 camposDto.add(modelMapper.map(campo, CampoDto.class));
+			
+			 CamadaReadDto camadaRead  = modelMapper.map(camada, CamadaReadDto.class);
+			 
+			 camadaRead.setCampos(camposDto);
+			
+			 camadaRead.add(linkTo(methodOn(CamadaResource.class).obterCamada(camada.getIdCamada())).withSelfRel());
+			camadas.add(camadaRead);			
+		}
+		
+		return camadas;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	 
 }

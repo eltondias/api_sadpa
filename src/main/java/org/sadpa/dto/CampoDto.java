@@ -8,7 +8,7 @@ public class CampoDto{
 	private boolean obrigatorio;	
 	private boolean titulo;		
 	private String nome;
-    private int camada;	
+
 	private TipoCampo tipoCampo;
 	
 	public int getIdCampo() {
@@ -35,12 +35,7 @@ public class CampoDto{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public int getCamada() {
-		return camada;
-	}
-	public void setCamada(int camada) {
-		this.camada = camada;
-	}
+	 
 	public TipoCampo getTipoCampo() {
 		return tipoCampo;
 	}

@@ -1,69 +1,56 @@
-package org.sadpa.models;
+package org.sadpa.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.hateoas.ResourceSupport;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
-public class Camada extends ResourceSupport{
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idCamada;
  
-	@NotBlank
-	private String nome;
-	
-	@NotBlank
-	@Column(columnDefinition = "TEXT")
-	private String descricao;
-		
-	private Calendar dataHoraInsercao;
-	
-	private Calendar dataHoraAtualizacao;
-	
-	private Calendar dataHoraExclusao;
-		
-	private boolean situacao;
+ 
 
+public class CamadaReadDto extends ResourceSupport{
+	
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		 
+	private int idCamada;	 
+	private String nome;		 
+	private String descricao;		 
+	private Calendar dataHoraInsercao;
+	private Calendar dataHoraAtualizacao;
+	private boolean situacao;	
+	private List<CampoDto> campos;
+		 
+	public List<CampoDto> getCampos() {
+		return campos;
+	}
+	public void setCampos(List<CampoDto> campos) {
+		this.campos = campos;
+	}
 	public int getIdCamada() {
 		return idCamada;
 	}
-
 	public void setIdCamada(int idCamada) {
 		this.idCamada = idCamada;
 	}
-
 	public String getNome() {
 		return nome;
 	}
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
 	public String getDescricao() {
 		return descricao;
 	}
-
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-
-	public Calendar getDataHoraInsercao() {
-		return dataHoraInsercao;
+	public String getDataHoraInsercao() {
+		
+		if (dataHoraInsercao != null)
+			return dateFormat.format(dataHoraInsercao.getTime());
+		else return null;
 	}
-
 	public void setDataHoraInsercao(Calendar dataHoraInsercao) {
 		this.dataHoraInsercao = dataHoraInsercao;
 	}
@@ -71,27 +58,13 @@ public class Camada extends ResourceSupport{
 	public Calendar getDataHoraAtualizacao() {
 		return dataHoraAtualizacao;
 	}
-
 	public void setDataHoraAtualizacao(Calendar dataHoraAtualizacao) {
 		this.dataHoraAtualizacao = dataHoraAtualizacao;
 	}
-	
-	public Calendar getDataHoraExclusao() {
-		return dataHoraExclusao;
-	}
-
-	public void setDataHoraExclusao(Calendar dataHoraExclusao) {
-		this.dataHoraExclusao = dataHoraExclusao;
-	}
-
 	public boolean isSituacao() {
 		return situacao;
 	}
-
 	public void setSituacao(boolean situacao) {
 		this.situacao = situacao;
 	}
-	
-	
-	
 }

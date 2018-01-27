@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CamadaRepository extends JpaRepository<Camada, String> {
 	
 	Camada findByIdCamada(int idCamada);
+	Iterable<Camada> findBySituacao(boolean situacao);
 	
 }
