@@ -12,6 +12,19 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 @Configuration
 public class DataConfiguration {
 
+	
+	@Bean
+    public DataSource dataSource(){
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://ec2-54-221-198-206.compute-1.amazonaws.com:5432/d11tom9urcbsjs");
+        dataSource.setUsername("wfspxvteynwnyg");
+        dataSource.setPassword("cf475e86b268648374097931fadddd3e7514f2ee909927f9707847077aa834fd");
+        return dataSource;
+    }
+	
+	
+	
 	/*@Bean
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -22,7 +35,7 @@ public class DataConfiguration {
         return dataSource;
     }*/
 	
-	@Bean
+	/*@Bean
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
@@ -30,7 +43,7 @@ public class DataConfiguration {
         dataSource.setUsername("iqgyctkx");
         dataSource.setPassword("v0e2SbqY3k5rauOftWgC9AU0wG8sjL0m");
         return dataSource;
-    }
+    }*/
 	
 	@Bean
 	public JpaVendorAdapter jpaVendorAdapter(){
