@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/camada")
+@Api(description = "Fornece recursos para manipulação das regras pertencentes a entidade camada")
 public class CamadaResource {
 
 	@Autowired
@@ -29,13 +32,13 @@ public class CamadaResource {
 	
 	@ApiOperation(value="Cadastra uma nova camada e seus campos")
 	@PostMapping()
-	public CamadaCreateDto cadastrarCamada(@RequestBody @Valid CamadaCreateDto camada) throws Exception{								
+	public CamadaReadDto cadastrarCamada(@RequestBody @Valid CamadaCreateDto camada) throws Exception{								
 		return service.cadastrarCamada(camada);
 	}
 	
 	@ApiOperation(value="Obtem uma camada pelo id da camada")
 	@GetMapping(value="/{idCamada}", produces="application/json")
-	public @ResponseBody CamadaReadDto obterCamada(@PathVariable(value="idCamada") int idCamada){		 	 
+	public @ResponseBody CamadaReadDto obterCamada(@PathVariable(value="idCamada") int idCamada) throws Exception{		 	 
 		return service.obterCamada(idCamada);
 	}
 		
@@ -53,10 +56,16 @@ public class CamadaResource {
 	}
 	
 	
-	@ApiOperation(value="Retorna uma lista com todas as camadas")
+	@ApiOperation(value="Lista camadas por situação (0 - INATIVA, 1 - ATIVA, 2 - BLOQUEADA, 3 - EXCLUIDA)")
+	@GetMapping(value="/PorSituacao/{situacao}", produces="application/json")
+	public @ResponseBody Iterable<CamadaReadDto> listarCamadasPorSituacao(@PathVariable(value="situacao") int situacao) throws Exception {			 
+		return service.listarCamadasPorSituacao(situacao);		
+	}	
+	
+	@ApiOperation(value="Lista com todas as camadas")
 	@GetMapping(value = "/", produces = "application/json; charset=UTF-8")
-	public @ResponseBody Iterable<CamadaReadDto> listarCamadas() {			 
-		return service.listarCamadas();		
+	public @ResponseBody Iterable<CamadaReadDto> listarTodasCamadas() throws Exception {			 
+		return service.listarTodasCamadas();		
 	}	
 	
 	

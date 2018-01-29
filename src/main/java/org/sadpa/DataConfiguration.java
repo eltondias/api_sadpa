@@ -16,9 +16,9 @@ public class DataConfiguration {
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://ec2-54-221-198-206.compute-1.amazonaws.com:5432/d11tom9urcbsjs");
-        dataSource.setUsername("wfspxvteynwnyg");
-        dataSource.setPassword("cf475e86b268648374097931fadddd3e7514f2ee909927f9707847077aa834fd");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/api_sadpa");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("postgres");
         return dataSource;
     }
 	

@@ -7,10 +7,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 import org.modelmapper.ModelMapper;
+import org.sadpa.constants.Situacao;
 import org.sadpa.dto.CamadaCreateDto;
 import org.sadpa.dto.CamadaReadDto;
 import org.sadpa.dto.CamadaUpdateDto;
-import org.sadpa.dto.CampoDto;
+import org.sadpa.dto.CampoCreateDto;
+import org.sadpa.dto.CampoReadDto;
+import org.sadpa.dto.CampoUpdateDto;
 import org.sadpa.models.Camada;
 import org.sadpa.models.Campo;
 import org.sadpa.models.TipoCampo;
@@ -20,6 +23,7 @@ import org.sadpa.repositories.TipoCampoRepository;
 import org.sadpa.resources.CamadaResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class CamadaService {
@@ -37,44 +41,46 @@ public class CamadaService {
 	private TipoCampoRepository tipoCampoRepository;
 
 	private static final Calendar dataAtual = Calendar.getInstance();
+		
+	private static CamadaReadDto responseCamadaReadDto = null;
 
 	public CamadaService() {
 		dataAtual.setTimeZone(TimeZone.getTimeZone("America/Belem"));
 	}
 
-	public CamadaCreateDto cadastrarCamada(CamadaCreateDto camadaCadastroDto) throws Exception {
+	public CamadaReadDto cadastrarCamada(CamadaCreateDto camadaCreateDto) throws Exception {
 
 		try {
-			
-			List<CampoDto> campos = new ArrayList<CampoDto>();
-			
-			for (CampoDto campoDto : camadaCadastroDto.getCampos()) {			
-				TipoCampo tipoCampo = tipoCampoRepository.findByIdTipoCampo(campoDto.getTipoCampo().getIdTipoCampo());								
-				if (tipoCampo == null)
-					throw new Exception("Tipo de campo do campo '" + campoDto.getNome() + "' não existe");
-				
-			}
-						
-			Camada camada = modelMapper.map(camadaCadastroDto, Camada.class);			
+			 			
+			verificaNomeCamada(camadaCreateDto.getNome());		 													
+			verificaTipoCampos(camadaCreateDto.getCampos());
+									
+			Camada camada = modelMapper.map(camadaCreateDto, Camada.class);			
 			camada.setDataHoraInsercao(dataAtual);
-			camada.setSituacao(true);
+			camada.setSituacao(Situacao.ATIVO);
 			camadaRepository.save(camada);
 
-			for (CampoDto campoDto : camadaCadastroDto.getCampos()) {
-				Campo campo = modelMapper.map(campoDto, Campo.class);				 				 
-				campo.setCamada(camada);
-				campo.setDataHoraInsercao(dataAtual);				
-				campo = campoRepository.save(campo);				
-				campoDto.setIdCampo(campo.getIdCampo());	
-				campoDto.setTipoCampo(tipoCampoRepository.findByIdTipoCampo(campo.getTipoCampo().getIdTipoCampo()));
-				campos.add(campoDto);				
+			//CADASTRO DOS CAMPOS DA CAMADA
+			List<CampoReadDto> campos = new ArrayList<CampoReadDto>();
+			for (CampoCreateDto campoCreateDto : camadaCreateDto.getCampos()) 
+			{					
+				Campo campo =  new Campo();
+				campo.setNome(campoCreateDto.getNome());
+				campo.setObrigatorio(campoCreateDto.isObrigatorio());
+				campo.setObrigatorio(campoCreateDto.isTitulo());				
+				campo.setTipoCampo(tipoCampoRepository.findByIdTipoCampo(campoCreateDto.getTipoCampo().getIdTipoCampo()));
+				campo.setCamada(camada);											 			 				 				
+				campo.setDataHoraInsercao(dataAtual);	
+				campo.setSituacao(Situacao.ATIVO);
+				campo = campoRepository.save(campo);							
+				campos.add(modelMapper.map(campo, CampoReadDto.class));				
 			}
 
-			CamadaCreateDto objCamadaCadastroDto = modelMapper.map(camada, CamadaCreateDto.class);
-			objCamadaCadastroDto.add(linkTo(methodOn(CamadaResource.class).obterCamada(objCamadaCadastroDto.getIdCamada())).withSelfRel());
-			objCamadaCadastroDto.setCampos(campos);
+			responseCamadaReadDto = modelMapper.map(camada, CamadaReadDto.class);
+			responseCamadaReadDto.add(linkTo(methodOn(CamadaResource.class).obterCamada(responseCamadaReadDto.getIdCamada())).withSelfRel());
+			responseCamadaReadDto.setCampos(campos);
 			
-			return objCamadaCadastroDto;
+			return responseCamadaReadDto;
 
 		} catch (Exception e) {
 
@@ -82,100 +88,175 @@ public class CamadaService {
 		}
 	}
 	
-	public CamadaReadDto obterCamada(int idCamada) {
+	public CamadaReadDto obterCamada(int idCamada) throws Exception {
 
-		Camada camada = camadaRepository.findByIdCamada(idCamada);
-		List<CampoDto> camposDto = new ArrayList<CampoDto>();
-		List<Campo> campos = campoRepository.findByCamada(camada);
+		List<CampoReadDto> camposReadDto = new ArrayList<CampoReadDto>();		
+		Camada camada = camadaRepository.findByIdCamada(idCamada);		
+		
+		if(camada == null )
+			 throw new Exception("Camada não existe!");
+		
+		if (camada.getSituacao() == Situacao.EXCLUIDO)
+			throw new Exception("Camada excluída");
+		
+		List<Campo> campos = campoRepository.findByCamada(camada);		
 		CamadaReadDto camadaResponse = modelMapper.map(camada, CamadaReadDto.class);
 
 		for (Campo campo : campos) 
-			camposDto.add(modelMapper.map(campo, CampoDto.class));
+			camposReadDto.add(modelMapper.map(campo, CampoReadDto.class));
 		
-		camadaResponse.setCampos(camposDto);		
+		camadaResponse.setCampos(camposReadDto);	
+		
 		return camadaResponse;
 	}
 	
 	public CamadaReadDto atualizarCamada(CamadaUpdateDto camadaUpdateDto) throws Exception {
-		try {			
+		try {	
+					
+			verificaNomeCamada(camadaUpdateDto.getNome());
+			verificaTipoCampos(camadaUpdateDto.getCampos());
+			
+			List<CampoReadDto> campos = new ArrayList<CampoReadDto>();
 			Camada oCamada =   camadaRepository.findByIdCamada(camadaUpdateDto.getIdCamada());
 			
-			oCamada.setDescricao(camadaUpdateDto.getDescricao());
-			oCamada.setNome(camadaUpdateDto.getNome());
-			oCamada.setSituacao(camadaUpdateDto.isSituacao());
-			oCamada.setDataHoraAtualizacao(dataAtual);
-			camadaRepository.save(oCamada);	
-						
-			for (CampoDto campo : camadaUpdateDto.getCampos()) {				
-				
-					Campo  oCampo = campoRepository.findByIdCampo(campo.getIdCampo());		
-								
-					if(oCampo == null) 
-						oCampo = new Campo();
-										
-					oCampo.setCamada(oCamada);
-					oCampo.setNome(campo.getNome());
-					oCampo.setObrigatorio(campo.isObrigatorio());
-					oCampo.setTipoCampo(campo.getTipoCampo());
-					oCampo.setTitulo(campo.isTitulo());		
-					oCampo.setDataHoraAtualizacao(dataAtual);
-					
-				 	campoRepository.save(oCampo);						 			 
-			}
+			if(oCamada.getSituacao() != Situacao.EXCLUIDO) {
 			
-			CamadaReadDto camadaResponse = modelMapper.map(oCamada, CamadaReadDto.class);			
-			camadaResponse.setCampos(camadaUpdateDto.getCampos());
+				oCamada.setDescricao(camadaUpdateDto.getDescricao());
+				oCamada.setNome(camadaUpdateDto.getNome());
+				oCamada.setSituacao(camadaUpdateDto.getSituacao());
+				oCamada.setDataHoraAtualizacao(dataAtual);
+				camadaRepository.save(oCamada);	
+							
+				for (CampoUpdateDto campoUpdateDto : camadaUpdateDto.getCampos()) {				
+					
+						Campo  campo = campoRepository.findByIdCampo(campoUpdateDto.getIdCampo());	
 						
-			return camadaResponse;
-
+						if(campo == null) {
+							campo = new Campo();
+							campo.setDataHoraInsercao(dataAtual);
+						}else 
+							campo.setDataHoraAtualizacao(dataAtual);		
+																
+						if (campoUpdateDto.getSituacao() == Situacao.EXCLUIDO)
+							campo.setDataHoraExclusao(dataAtual);
+						
+						campo.setCamada(oCamada);
+						campo.setNome(campoUpdateDto.getNome());
+						campo.setObrigatorio(campoUpdateDto.isObrigatorio());
+						campo.setTipoCampo(campoUpdateDto.getTipoCampo());
+						campo.setTitulo(campoUpdateDto.isTitulo());
+						campo.setSituacao(campoUpdateDto.getSituacao());
+										
+					 	campoRepository.save(campo);					 
+					 	campos.add(modelMapper.map(campo, CampoReadDto.class));
+				}
+				
+				responseCamadaReadDto = modelMapper.map(oCamada, CamadaReadDto.class);			
+				responseCamadaReadDto.setCampos(campos);
+				return responseCamadaReadDto;
+			
+			}else 
+				throw new Exception("Essa camada não pode ser atualizada pois a mesma está com situação = EXCLUIDA (3), favor entrar em contato com o administrador do sistema");
+									
 		} catch (Exception e) {
 
 			throw new Exception(e.getMessage(), e);
 		}
 	}
 
-	public CamadaReadDto excluirCamada(int idCamada) {
-		Camada camada = camadaRepository.findByIdCamada(idCamada);
-		camada.setSituacao(false);		
-		camada.setDataHoraExclusao(dataAtual);
-		camadaRepository.save(camada);		
-		return modelMapper.map(camada, CamadaReadDto.class);			 
+	public CamadaReadDto excluirCamada(int idCamada) throws Exception {
+		
+		Camada camada = camadaRepository.findByIdCamada(idCamada);		
+	
+		if (camada != null)
+		{
+			if (camada.getSituacao() == Situacao.EXCLUIDO)
+				throw new Exception("Camada já foi excluída");
+			
+			camada.setSituacao(Situacao.EXCLUIDO); 
+			camada.setDataHoraExclusao(dataAtual);
+			camadaRepository.save(camada);	
+			
+			List<CampoReadDto> camposReadDto =  new ArrayList<CampoReadDto>();
+			List<Campo> campos =  campoRepository.findByCamada(camada);
+			
+			for (Campo campo : campos) {				
+				campo.setSituacao(Situacao.EXCLUIDO);				
+				campo.setDataHoraExclusao(dataAtual);
+				campoRepository.save(campo);				
+				camposReadDto.add(modelMapper.map(campo, CampoReadDto.class));
+			}
+										
+			responseCamadaReadDto = 	modelMapper.map(camada, CamadaReadDto.class);					
+			responseCamadaReadDto.setCampos(camposReadDto);
+			return 	responseCamadaReadDto;	 
+						
+		}else 
+			throw new Exception("Camada não existe");
+		
 	}
 	
-	public Iterable<CamadaReadDto> listarCamadas() {
+	public Iterable<CamadaReadDto> listarCamadasPorSituacao(int situacao ) throws Exception {
 				
-		Iterable<Camada> listaCamadas = camadaRepository.findBySituacao(true);
+		Iterable<Camada> listaCamadas = camadaRepository.findBySituacao(situacao);
 				
 		ArrayList<CamadaReadDto> camadas = new ArrayList<CamadaReadDto>();
 		
-		for (Camada camada : listaCamadas) {			
-			 List<Campo> campos = campoRepository.findByCamada(camada);
-			 List<CampoDto> camposDto = new ArrayList<CampoDto>();
-			 for (Campo campo :campos) 				 
-				 camposDto.add(modelMapper.map(campo, CampoDto.class));
+		for (Camada camada : listaCamadas) {	
 			
-			 CamadaReadDto camadaRead  = modelMapper.map(camada, CamadaReadDto.class);
+			 List<Campo> camposCamada = campoRepository.findByCamada(camada);
+			 List<CampoReadDto> campos = new ArrayList<CampoReadDto>();
 			 
-			 camadaRead.setCampos(camposDto);
+			 for (Campo campo : camposCamada) 				 
+				 campos.add(modelMapper.map(campo, CampoReadDto.class));
 			
+			 CamadaReadDto camadaRead  = modelMapper.map(camada, CamadaReadDto.class);			 
+			 camadaRead.setCampos(campos);			
 			 camadaRead.add(linkTo(methodOn(CamadaResource.class).obterCamada(camada.getIdCamada())).withSelfRel());
-			camadas.add(camadaRead);			
+			 camadas.add(camadaRead);			
 		}
 		
 		return camadas;
 	}
 
+	public Iterable<CamadaReadDto> listarTodasCamadas() throws Exception {
+		
+		Iterable<Camada> listaCamadas = camadaRepository.findAll();
+				
+		ArrayList<CamadaReadDto> camadas = new ArrayList<CamadaReadDto>();
+		
+		for (Camada camada : listaCamadas) {				
+			 List<Campo> camposCamada = campoRepository.findByCamada(camada);
+			 List<CampoReadDto> campos = new ArrayList<CampoReadDto>();			 
+			 for (Campo campo : camposCamada) 				 
+				 campos.add(modelMapper.map(campo, CampoReadDto.class));
+			
+			 CamadaReadDto camadaRead  = modelMapper.map(camada, CamadaReadDto.class);			 
+			 camadaRead.setCampos(campos);			
+			 camadaRead.add(linkTo(methodOn(CamadaResource.class).obterCamada(camada.getIdCamada())).withSelfRel());
+			 camadas.add(camadaRead);			
+		}
+		
+		return camadas;
+	}
 	
+	private void  verificaNomeCamada(String nome) throws Exception {
+		
+		List<Camada> camadaNome =  camadaRepository.findByNome(nome);			
+		if(camadaNome.size() > 0) 				 
+			throw new Exception("Já existe uma camada cadastrada com o nome: " + nome); 		
+	}
 	
+	private <T> void verificaTipoCampos(List<T> campos) throws Exception {
+		
+		for(T campoT : campos) {			
+			Campo campo =  modelMapper.map(campoT, Campo.class);					
+			TipoCampo tipoCampo = tipoCampoRepository.findByIdTipoCampo(campo.getTipoCampo().getIdTipoCampo());								
+			if (tipoCampo == null)
+				throw new Exception("Tipo de campo do campo '" + campo.getNome() + "' não existe");	
+		}
+		 
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-
 	 
 }

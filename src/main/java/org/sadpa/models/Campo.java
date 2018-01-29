@@ -11,6 +11,9 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 public class Campo{
 	
@@ -21,12 +24,15 @@ public class Campo{
 	private boolean obrigatorio;
 	
 	private boolean titulo;	
-	
+
 	private Calendar dataHoraInsercao;
 	
 	private Calendar dataHoraAtualizacao;
-		
 	
+	private Calendar dataHoraExclusao;
+	
+	private int situacao; //0 - INATIVO, 1 - ATIVO, 2 - BLOQUEADO, 3 - EXCLUIDO
+			
 	@NotBlank
 	private String nome;
 	
@@ -62,6 +68,38 @@ public class Campo{
 		this.titulo = titulo;
 	}
 
+	public Calendar getDataHoraInsercao() {
+		return dataHoraInsercao;
+	}
+
+	public void setDataHoraInsercao(Calendar dataHoraInsercao) {
+		this.dataHoraInsercao = dataHoraInsercao;
+	}
+
+	public Calendar getDataHoraAtualizacao() {
+		return dataHoraAtualizacao;
+	}
+
+	public void setDataHoraAtualizacao(Calendar dataHoraAtualizacao) {
+		this.dataHoraAtualizacao = dataHoraAtualizacao;
+	}
+
+	public Calendar getDataHoraExclusao() {
+		return dataHoraExclusao;
+	}
+
+	public void setDataHoraExclusao(Calendar dataHoraExclusao) {
+		this.dataHoraExclusao = dataHoraExclusao;
+	}
+
+	public int getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(int situacao) {
+		this.situacao = situacao;
+	}
+
 	public String getNome() {
 		return nome;
 	}
@@ -84,21 +122,5 @@ public class Campo{
 
 	public void setTipoCampo(TipoCampo tipoCampo) {
 		this.tipoCampo = tipoCampo;
-	}
-
-	public Calendar getDataHoraInsercao() {
-		return dataHoraInsercao;
-	}
-
-	public void setDataHoraInsercao(Calendar dataHoraInsercao) {
-		this.dataHoraInsercao = dataHoraInsercao;
-	}
-
-	public Calendar getDataHoraAtualizacao() {
-		return dataHoraAtualizacao;
-	}
-
-	public void setDataHoraAtualizacao(Calendar dataHoraAtualizacao) {
-		this.dataHoraAtualizacao = dataHoraAtualizacao;
-	}	
+	}	 
 }

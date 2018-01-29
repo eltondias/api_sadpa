@@ -1,31 +1,30 @@
-{
-  "nome": "Camada Teste",
-  "descricao": "Nova camada Teste",
-  "situacao": true,
-  "campos": [
-    {
-      "nome": "Campo1",
-      "obrigatorio": true,
-      "tipoCampo": {
-        "idTipoCampo": 1
+  {
+    "nome": "Camada Teste",
+    "descricao": "Descrição camada Teste",  
+    "campos": [
+      {
+        "nome": "Campo 01",
+        "obrigatorio": true,
+        "titulo": true,
+        "tipoCampo": {
+          "idTipoCampo": 1
+        }       
       },
-      "titulo": true
-    },
-    {
-      "nome": "Campo2",
-      "obrigatorio": true,
-      "tipoCampo": {
-        "idTipoCampo": 1
+      {
+        "nome": "Campo 02",
+        "obrigatorio": true,
+         "titulo": true,
+        "tipoCampo": {
+          "idTipoCampo": 1
+        }         
       },
-      "titulo": true
-    },
-    {
-      "nome": "Campo3",
-      "obrigatorio": true,
-      "tipoCampo": {
-        "idTipoCampo": 1
-      },
-      "titulo": true
-    }
-  ]
-}
+      {
+        "nome": "Campo 03",
+        "obrigatorio": true,
+        "titulo": true,
+        "tipoCampo": {
+          "idTipoCampo": 1
+        }      
+      }
+    ]
+  }

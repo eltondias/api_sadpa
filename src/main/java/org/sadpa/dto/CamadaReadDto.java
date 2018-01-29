@@ -1,38 +1,23 @@
 package org.sadpa.dto;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import org.sadpa.utils.Formata;
 import org.springframework.hateoas.ResourceSupport;
 
- 
- 
 
-public class CamadaReadDto extends ResourceSupport{
+public class CamadaReadDto  extends ResourceSupport {
 	
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		 
-	private int idCamada;	 
+	private int idCamada;
 	private String nome;		 
 	private String descricao;		 
+	private List<CampoReadDto> campos;
 	private Calendar dataHoraInsercao;
 	private Calendar dataHoraAtualizacao;
-	private boolean situacao;	
-	private List<CampoDto> campos;
-		 
-	public List<CampoDto> getCampos() {
-		return campos;
-	}
-	public void setCampos(List<CampoDto> campos) {
-		this.campos = campos;
-	}
-	public int getIdCamada() {
-		return idCamada;
-	}
-	public void setIdCamada(int idCamada) {
-		this.idCamada = idCamada;
-	}
+	private Calendar dataHoraExclusao;
+	private int situacao;	
+
 	public String getNome() {
 		return nome;
 	}
@@ -45,26 +30,47 @@ public class CamadaReadDto extends ResourceSupport{
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public String getDataHoraInsercao() {
-		
-		if (dataHoraInsercao != null)
-			return dateFormat.format(dataHoraInsercao.getTime());
-		else return null;
+	public List<CampoReadDto> getCampos() {
+		return campos;
+	}
+	public void setCampos(List<CampoReadDto> campos) {
+		this.campos = campos;
+	}	
+	
+	public int getIdCamada() {
+		return idCamada;
+	}
+
+	public void setIdCamada(int idCamada) {
+		this.idCamada = idCamada;
+	}	
+	
+	public String getDataHoraInsercao() {			 
+		return Formata.DataTime(dataHoraInsercao);
 	}
 	public void setDataHoraInsercao(Calendar dataHoraInsercao) {
 		this.dataHoraInsercao = dataHoraInsercao;
 	}
 
-	public Calendar getDataHoraAtualizacao() {
-		return dataHoraAtualizacao;
+	public String getDataHoraAtualizacao() {		 	
+		return Formata.DataTime(dataHoraAtualizacao);		
 	}
+	
 	public void setDataHoraAtualizacao(Calendar dataHoraAtualizacao) {
 		this.dataHoraAtualizacao = dataHoraAtualizacao;
 	}
-	public boolean isSituacao() {
+	
+	public String  getDataHoraExclusao() {
+		return Formata.DataTime(dataHoraExclusao);
+	}
+	public void setDataHoraExclusao(Calendar dataHoraExclusao) {
+		this.dataHoraExclusao = dataHoraExclusao;
+	}
+	public int getSituacao() {
 		return situacao;
 	}
-	public void setSituacao(boolean situacao) {
+	
+	public void setSituacao(int situacao) {
 		this.situacao = situacao;
 	}
 }

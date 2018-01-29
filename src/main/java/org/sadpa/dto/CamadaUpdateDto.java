@@ -1,21 +1,15 @@
 package org.sadpa.dto;
 
 import java.util.List;
-public class CamadaUpdateDto {
-			 
-	private int idCamada;	 
+
+public class CamadaUpdateDto  {
+			 	 	 
+	private int idCamada;
 	private String nome;		 
-	private String descricao;		 	 
-	private boolean situacao;	
+	private String descricao;		 
+	private List<CampoUpdateDto> campos;
+	private int situacao;
 	
-	private List<CampoDto> campos;
-		 
-	public List<CampoDto> getCampos() {
-		return campos;
-	}
-	public void setCampos(List<CampoDto> campos) {
-		this.campos = campos;
-	}
 	public int getIdCamada() {
 		return idCamada;
 	}
@@ -34,11 +28,16 @@ public class CamadaUpdateDto {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
- 
-	public boolean isSituacao() {
+	public List<CampoUpdateDto> getCampos() {
+		return campos;
+	}
+	public void setCampos(List<CampoUpdateDto> campos) {
+		this.campos = campos;
+	}
+	public int getSituacao() {
 		return situacao;
 	}
-	public void setSituacao(boolean situacao) {
+	public void setSituacao(int situacao) {
 		this.situacao = situacao;
-	}
+	}	
 }
