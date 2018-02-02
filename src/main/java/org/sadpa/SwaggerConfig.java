@@ -26,7 +26,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("org.sadpa"))
-                .paths(regex("/camada.*"))
+                .paths(regex("/.*"))
                 .build()
                 .apiInfo(metaInfo());
     }

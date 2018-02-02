@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/camada")
-@Api(description = "Fornece recursos para manipulação das regras pertencentes a entidade camada")
+@Api(description = "Camadas de dados geolocalizados")
 public class CamadaResource {
 
 	@Autowired

@@ -112,12 +112,15 @@ public class CamadaService {
 	
 	public CamadaReadDto atualizarCamada(CamadaUpdateDto camadaUpdateDto) throws Exception {
 		try {	
-					
-			verificaNomeCamada(camadaUpdateDto.getNome());
+				
 			verificaTipoCampos(camadaUpdateDto.getCampos());
 			
 			List<CampoReadDto> campos = new ArrayList<CampoReadDto>();
 			Camada oCamada =   camadaRepository.findByIdCamada(camadaUpdateDto.getIdCamada());
+			
+			
+			if (!camadaUpdateDto.getNome().contains(oCamada.getNome()) )
+				verificaNomeCamada(camadaUpdateDto.getNome());
 			
 			if(oCamada.getSituacao() != Situacao.EXCLUIDO) {
 			
