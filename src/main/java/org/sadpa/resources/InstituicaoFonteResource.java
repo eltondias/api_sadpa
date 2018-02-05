@@ -1,14 +1,16 @@
 package org.sadpa.resources;
 import javax.validation.Valid;
 
-import org.sadpa.dto.CamadaReadDto;
 import org.sadpa.dto.InstituicaoFonteCreateDto;
+import org.sadpa.dto.InstituicaoFonteUpdateDto;
 import org.sadpa.models.InstituicaoFonte;
 import org.sadpa.services.InstituicaoFonteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,28 +26,45 @@ public class InstituicaoFonteResource {
 	@Autowired
 	private InstituicaoFonteService service;
 		
-	@ApiOperation(value="Cadastra uma nova instituição fonte")
+	@ApiOperation(value="Cadastra instituição fonte")
 	@PostMapping() 
 	public InstituicaoFonte cadastrar(@RequestBody @Valid InstituicaoFonteCreateDto instituicaoFonte) throws Exception{								
 		return service.cadastrar(instituicaoFonte);
 	}
 	
-	@ApiOperation(value="Obtem uma camada pelo id da Instituicao")
-	@GetMapping(value="/{idInstituicao}", produces="application/json")
+	@ApiOperation(value="Obtem Instituicao")
+	@GetMapping("{idInstituicao}")
 	public @ResponseBody InstituicaoFonte obterInstituicao(@PathVariable(value="idInstituicao") int idInstituicao) throws Exception{		 	 
 		return service.obterInstituicao(idInstituicao);
 	}
+		
+	@ApiOperation(value="Atualiza instituição fonte")
+	@PutMapping()
+	public @ResponseBody InstituicaoFonte  atualizarInstituicaoFonte(@RequestBody @Valid InstituicaoFonteUpdateDto instituicaoFonteUpdateDto) throws Exception{			
+		return service.atualizarInstituicaoFonte(instituicaoFonteUpdateDto);
+	}
 	
-	@ApiOperation(value="Lista camadas por situação (0 - INATIVA, 1 - ATIVA, 2 - BLOQUEADA, 3 - EXCLUIDA)")
-	@GetMapping(value="/PorSituacao/{situacao}", produces="application/json")
+	
+	@ApiOperation(value="Excluir Instituicao fonte")
+	@DeleteMapping(value="/{idInstituicao}")
+	public @ResponseBody InstituicaoFonte excluirInstituicao(@PathVariable(value="idInstituicao") int idInstituicao) throws Exception{		 	 
+		return service.excluirInstituicao(idInstituicao);
+	}
+	
+	
+	@ApiOperation(value="Lista instituições fonte por situação (0 - INATIVA, 1 - ATIVA, 2 - BLOQUEADA, 3 - EXCLUIDA)")
+	@GetMapping(value="/PorSituacao/{situacao}")
 	public @ResponseBody Iterable<InstituicaoFonte> listarInstituicoesPorSituacao(@PathVariable(value="situacao") int situacao) throws Exception {			 
 		return service.listarInstituicoesPorSituacao(situacao);		
 	}	
-	
+		 
 	@ApiOperation(value="Lista com todas as instituições fonte")
-	@GetMapping(value = "/", produces = "application/json; charset=UTF-8")
+	@GetMapping()
 	public @ResponseBody Iterable<InstituicaoFonte> listarTodasInstituicoes() throws Exception {			 
 		return service.listarTodasInstituicoes();		
-	}	
+	}	 
+	
+	
+	
 	
 }

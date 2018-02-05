@@ -1,22 +1,13 @@
 package org.sadpa.services;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.TimeZone;
-import org.modelmapper.ModelMapper;
 import org.sadpa.constants.Situacao;
-import org.sadpa.dto.CamadaReadDto;
-import org.sadpa.dto.CampoReadDto;
 import org.sadpa.dto.InstituicaoFonteCreateDto;
-import org.sadpa.models.Camada;
-import org.sadpa.models.Campo;
+import org.sadpa.dto.InstituicaoFonteUpdateDto;
 import org.sadpa.models.InstituicaoFonte;
 import org.sadpa.repositories.InstituicaoFonteRepository;
-import org.sadpa.resources.CamadaResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +16,6 @@ public class InstituicaoFonteService {
 	
 	
 	@Autowired
-	private ModelMapper modelMapper;
-
-	@Autowired
 	private InstituicaoFonteRepository instituicaoFonteRepository;
 	
 	private static final Calendar dataAtual = Calendar.getInstance();
@@ -35,8 +23,7 @@ public class InstituicaoFonteService {
 	public InstituicaoFonteService() {
 		dataAtual.setTimeZone(TimeZone.getTimeZone("America/Belem"));
 	}
-	
-	
+		
 	public InstituicaoFonte cadastrar(InstituicaoFonteCreateDto instituicaoFonte) throws Exception {
 
 		try {
@@ -57,8 +44,43 @@ public class InstituicaoFonteService {
 		}
 	}
 	
-	public InstituicaoFonte obterInstituicao(int idInstituicaoFonte) throws Exception {		 
-		return instituicaoFonteRepository.findByIdInstituicaoFonte(idInstituicaoFonte);			 
+	public InstituicaoFonte obterInstituicao(int idInstituicaoFonte) throws Exception {	
+		
+		InstituicaoFonte instituicaoFonte = instituicaoFonteRepository.findByIdInstituicaoFonte(idInstituicaoFonte);
+		
+		if(instituicaoFonte.getSituacao() != Situacao.EXCLUIDO)		
+			return instituicaoFonteRepository.findByIdInstituicaoFonte(idInstituicaoFonte);	
+		else return null;
+	}
+	
+	public InstituicaoFonte atualizarInstituicaoFonte(InstituicaoFonteUpdateDto instituicaoFonteNova) throws Exception {			
+		InstituicaoFonte instituicaoFonteAtual =  instituicaoFonteRepository.findByIdInstituicaoFonte(instituicaoFonteNova.getIdInstituicaoFonte());			
+		instituicaoFonteAtual.setCnpj(instituicaoFonteNova.getCnpj());
+		instituicaoFonteAtual.setDescricao(instituicaoFonteNova.getDescricao());
+		instituicaoFonteAtual.setNome(instituicaoFonteNova.getNome());
+		instituicaoFonteAtual.setDataHoraAtualizacao(dataAtual);		
+		
+		if(instituicaoFonteNova.getSituacao() !=  Situacao.EXCLUIDO)
+			instituicaoFonteAtual.setSituacao(instituicaoFonteNova.getSituacao());
+		
+		
+		return instituicaoFonteRepository.save(instituicaoFonteAtual);			 
+	}
+	
+	public InstituicaoFonte excluirInstituicao(int idInstituicaoFonte) throws Exception {			
+		
+		InstituicaoFonte instituicaoFonteAtual =  instituicaoFonteRepository.findByIdInstituicaoFonte(idInstituicaoFonte);			
+		
+		if(instituicaoFonteAtual != null) {		
+			
+			if(instituicaoFonteAtual.getSituacao() == Situacao.EXCLUIDO)
+				throw new Exception("Instituição fonte já foi excluída"); 			
+			
+			instituicaoFonteAtual.setSituacao(Situacao.EXCLUIDO);
+			instituicaoFonteAtual.setDataHoraExclusao(dataAtual);		
+			return instituicaoFonteRepository.save(instituicaoFonteAtual);		 		
+		}else  
+			throw new Exception("Instituição fonte não existe"); 
 	}
 	
 	public Iterable<InstituicaoFonte> listarTodasInstituicoes() throws Exception {		 
