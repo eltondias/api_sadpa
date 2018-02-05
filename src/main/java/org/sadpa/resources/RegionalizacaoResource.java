@@ -22,8 +22,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/camada")
-@Api(description = "Camadas de dados geolocalizados")
+@RequestMapping("/regionalizacao")
+@Api(description = "Regionalização")
 public class RegionalizacaoResource {
 
 	@Autowired
