@@ -23,6 +23,7 @@ public class Regionalizacao
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer idRegionalizacao;
    private String nome;
+   private String descricao; 
    private Calendar dataHoraInsercao;	
    private Calendar dataHoraAtualizacao;	
    private Calendar dataHoraExclusao;	
@@ -53,7 +54,15 @@ public class Regionalizacao
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+		
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 	public Calendar getDataHoraInsercao() {
 		return dataHoraInsercao;
 	}

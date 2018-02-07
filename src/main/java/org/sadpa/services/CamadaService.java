@@ -5,7 +5,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 import org.modelmapper.ModelMapper;
 import org.sadpa.constants.Situacao;
 import org.sadpa.dto.CamadaCreateDto;
@@ -40,15 +39,13 @@ public class CamadaService {
 	@Autowired
 	private TipoCampoRepository tipoCampoRepository;
 
-	private static final Calendar dataAtual = Calendar.getInstance();
+ 
 		
 	private static CamadaReadDto responseCamadaReadDto = null;
 
-	public CamadaService() {
-		dataAtual.setTimeZone(TimeZone.getTimeZone("America/Belem"));
-	}
+ 
 
-	public CamadaReadDto cadastrarCamada(CamadaCreateDto camadaCreateDto) throws Exception {
+	public CamadaReadDto cadastrar(CamadaCreateDto camadaCreateDto) throws Exception {
 
 		try {
 			 			
@@ -56,7 +53,7 @@ public class CamadaService {
 			verificaTipoCampos(camadaCreateDto.getCampos());
 									
 			Camada camada = modelMapper.map(camadaCreateDto, Camada.class);			
-			camada.setDataHoraInsercao(dataAtual);
+			camada.setDataHoraInsercao(Calendar.getInstance());
 			camada.setSituacao(Situacao.ATIVO);
 			camadaRepository.save(camada);
 
@@ -70,14 +67,14 @@ public class CamadaService {
 				campo.setObrigatorio(campoCreateDto.isTitulo());				
 				campo.setTipoCampo(tipoCampoRepository.findByIdTipoCampo(campoCreateDto.getTipoCampo().getIdTipoCampo()));
 				campo.setCamada(camada);											 			 				 				
-				campo.setDataHoraInsercao(dataAtual);	
+				campo.setDataHoraInsercao(Calendar.getInstance());	
 				campo.setSituacao(Situacao.ATIVO);
 				campo = campoRepository.save(campo);							
 				campos.add(modelMapper.map(campo, CampoReadDto.class));				
 			}
 
 			responseCamadaReadDto = modelMapper.map(camada, CamadaReadDto.class);
-			responseCamadaReadDto.add(linkTo(methodOn(CamadaResource.class).obterCamada(responseCamadaReadDto.getIdCamada())).withSelfRel());
+			responseCamadaReadDto.add(linkTo(methodOn(CamadaResource.class).obter(responseCamadaReadDto.getIdCamada())).withSelfRel());
 			responseCamadaReadDto.setCampos(campos);
 			
 			return responseCamadaReadDto;
@@ -88,7 +85,7 @@ public class CamadaService {
 		}
 	}
 	
-	public CamadaReadDto obterCamada(int idCamada) throws Exception {
+	public CamadaReadDto obter(int idCamada) throws Exception {
 
 		List<CampoReadDto> camposReadDto = new ArrayList<CampoReadDto>();		
 		Camada camada = camadaRepository.findByIdCamada(idCamada);		
@@ -110,9 +107,11 @@ public class CamadaService {
 		return camadaResponse;
 	}
 	
-	public CamadaReadDto atualizarCamada(CamadaUpdateDto camadaUpdateDto) throws Exception {
+	public CamadaReadDto atualizar(CamadaUpdateDto camadaUpdateDto) throws Exception {
 		try {	
-				
+			
+			Calendar dataAtual = Calendar.getInstance();
+			
 			verificaTipoCampos(camadaUpdateDto.getCampos());
 			
 			List<CampoReadDto> campos = new ArrayList<CampoReadDto>();
@@ -127,7 +126,7 @@ public class CamadaService {
 				oCamada.setDescricao(camadaUpdateDto.getDescricao());
 				oCamada.setNome(camadaUpdateDto.getNome());
 				oCamada.setSituacao(camadaUpdateDto.getSituacao());
-				oCamada.setDataHoraAtualizacao(dataAtual);
+				oCamada.setDataHoraAtualizacao(Calendar.getInstance());
 				camadaRepository.save(oCamada);	
 							
 				for (CampoUpdateDto campoUpdateDto : camadaUpdateDto.getCampos()) {				
@@ -167,8 +166,9 @@ public class CamadaService {
 		}
 	}
 
-	public CamadaReadDto excluirCamada(int idCamada) throws Exception {
+	public CamadaReadDto excluir(int idCamada) throws Exception {
 		
+		Calendar dataAtual = Calendar.getInstance();
 		Camada camada = camadaRepository.findByIdCamada(idCamada);		
 	
 		if (camada != null)
@@ -199,7 +199,7 @@ public class CamadaService {
 		
 	}
 	
-	public Iterable<CamadaReadDto> listarCamadasPorSituacao(int situacao ) throws Exception {
+	public Iterable<CamadaReadDto> listarPorSituacao(int situacao ) throws Exception {
 				
 		Iterable<Camada> listaCamadas = camadaRepository.findBySituacao(situacao);
 				
@@ -215,14 +215,14 @@ public class CamadaService {
 			
 			 CamadaReadDto camadaRead  = modelMapper.map(camada, CamadaReadDto.class);			 
 			 camadaRead.setCampos(campos);			
-			 camadaRead.add(linkTo(methodOn(CamadaResource.class).obterCamada(camada.getIdCamada())).withSelfRel());
+			 camadaRead.add(linkTo(methodOn(CamadaResource.class).obter(camada.getIdCamada())).withSelfRel());
 			 camadas.add(camadaRead);			
 		}
 		
 		return camadas;
 	}
 
-	public Iterable<CamadaReadDto> listarTodasCamadas() throws Exception {
+	public Iterable<CamadaReadDto> listar() throws Exception {
 		
 		Iterable<Camada> listaCamadas = camadaRepository.findAll();
 				
@@ -236,7 +236,7 @@ public class CamadaService {
 			
 			 CamadaReadDto camadaRead  = modelMapper.map(camada, CamadaReadDto.class);			 
 			 camadaRead.setCampos(campos);			
-			 camadaRead.add(linkTo(methodOn(CamadaResource.class).obterCamada(camada.getIdCamada())).withSelfRel());
+			 camadaRead.add(linkTo(methodOn(CamadaResource.class).obter(camada.getIdCamada())).withSelfRel());
 			 camadas.add(camadaRead);			
 		}
 		

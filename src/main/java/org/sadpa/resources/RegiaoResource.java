@@ -15,12 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-
+ 
 @RestController
 @RequestMapping("/regiao")
 @Api(description = "Regiões de integração")
@@ -31,33 +28,33 @@ public class RegiaoResource {
 		
 	
 	@PostMapping()
-	public Regiao cadastrarRegiao(@RequestBody @Valid RegiaoCreateDto regiaoCreateDto)throws Exception{
-		return service.cadastrarRegiao(regiaoCreateDto);
+	public Regiao cadastrar(@RequestBody @Valid RegiaoCreateDto regiaoCreateDto)throws Exception{
+		return service.cadastrar(regiaoCreateDto);
 	}
 		 
 	@GetMapping("{idRegiao}")
-	public  Regiao obterRegiao(@PathVariable(value="idRegiao") int idRegiao) throws Exception{		 	 
-		return service.obterRegiao(idRegiao);
+	public  Regiao obter(@PathVariable(value="idRegiao") int idRegiao) throws Exception{		 	 
+		return service.obter(idRegiao);
 	}
 	
 	@PutMapping()
-	public Regiao  atualizarRegiao(@RequestBody @Valid RegiaoUpdateDto regiaoUpdateDto) throws Exception{			
-		return service.atualizarRegiao(regiaoUpdateDto);
+	public Regiao  atualizar(@RequestBody @Valid RegiaoUpdateDto regiaoUpdateDto) throws Exception{			
+		return service.atualizar(regiaoUpdateDto);
 	}
 	
 	@DeleteMapping()
-	public  Regiao  excluirRegiao(@RequestParam(value="idCamada") int idRegiao) throws Exception{			
-		return service.excluirRegiao(idRegiao);
+	public  Regiao  excluir(@RequestParam(value="idCamada") int idRegiao) throws Exception{			
+		return service.excluir(idRegiao);
 	}
 	
 	@GetMapping("/PorSituacao/{situacao}")
-	public Iterable<Regiao> listarRegiaoPorSituacao(@PathVariable(value="situacao") int situacao) throws Exception {			 
-		return service.listarRegioesPorSituacao(situacao);		
+	public Iterable<Regiao> listarPorSituacao(@PathVariable(value="situacao") int situacao) throws Exception {			 
+		return service.listarPorSituacao(situacao);		
 	}	
 
 	@GetMapping()
-	public Iterable<Regiao> listarRegioes() throws Exception {			 
-		return service.listarRegioes();
+	public Iterable<Regiao> listar() throws Exception {			 
+		return service.listar();
 	}	 
 	
 }

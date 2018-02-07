@@ -34,34 +34,34 @@ public class InstituicaoFonteResource {
 	
 	@ApiOperation(value="Obtem Instituicao")
 	@GetMapping("{idInstituicao}")
-	public @ResponseBody InstituicaoFonte obterInstituicao(@PathVariable(value="idInstituicao") int idInstituicao) throws Exception{		 	 
-		return service.obterInstituicao(idInstituicao);
+	public @ResponseBody InstituicaoFonte obter(@PathVariable(value="idInstituicao") int idInstituicao) throws Exception{		 	 
+		return service.obter(idInstituicao);
 	}
 		
 	@ApiOperation(value="Atualiza instituição fonte")
 	@PutMapping()
-	public @ResponseBody InstituicaoFonte  atualizarInstituicaoFonte(@RequestBody @Valid InstituicaoFonteUpdateDto instituicaoFonteUpdateDto) throws Exception{			
-		return service.atualizarInstituicaoFonte(instituicaoFonteUpdateDto);
+	public @ResponseBody InstituicaoFonte  atualizar(@RequestBody @Valid InstituicaoFonteUpdateDto instituicaoFonteUpdateDto) throws Exception{			
+		return service.atualizar(instituicaoFonteUpdateDto);
 	}
 	
 	
 	@ApiOperation(value="Excluir Instituicao fonte")
 	@DeleteMapping(value="/{idInstituicao}")
-	public @ResponseBody InstituicaoFonte excluirInstituicao(@PathVariable(value="idInstituicao") int idInstituicao) throws Exception{		 	 
-		return service.excluirInstituicao(idInstituicao);
+	public @ResponseBody InstituicaoFonte excluir(@PathVariable(value="idInstituicao") int idInstituicao) throws Exception{		 	 
+		return service.excluir(idInstituicao);
 	}
 	
 	
 	@ApiOperation(value="Lista instituições fonte por situação (0 - INATIVA, 1 - ATIVA, 2 - BLOQUEADA, 3 - EXCLUIDA)")
 	@GetMapping(value="/PorSituacao/{situacao}")
-	public @ResponseBody Iterable<InstituicaoFonte> listarInstituicoesPorSituacao(@PathVariable(value="situacao") int situacao) throws Exception {			 
-		return service.listarInstituicoesPorSituacao(situacao);		
+	public @ResponseBody Iterable<InstituicaoFonte> listarPorSituacao(@PathVariable(value="situacao") int situacao) throws Exception {			 
+		return service.listarPorSituacao(situacao);		
 	}	
 		 
 	@ApiOperation(value="Lista com todas as instituições fonte")
 	@GetMapping()
-	public @ResponseBody Iterable<InstituicaoFonte> listarTodasInstituicoes() throws Exception {			 
-		return service.listarTodasInstituicoes();		
+	public @ResponseBody Iterable<InstituicaoFonte> listar() throws Exception {			 
+		return service.listar();		
 	}	 
 	
 	

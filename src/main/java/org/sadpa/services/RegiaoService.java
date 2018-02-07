@@ -22,36 +22,36 @@ public class RegiaoService {
 	@Autowired
 	private RegiaoRepository regiaoRepository;
 
-	public Regiao cadastrarRegiao(RegiaoCreateDto regiaoCreateDto) {			
+	public Regiao cadastrar(RegiaoCreateDto regiaoCreateDto) {			
 		Regiao regiao =  modelMapper.map(regiaoCreateDto, Regiao.class);								
 		regiao.setSituacao(Situacao.ATIVO);
 		regiao.setDataHoraInsercao(dataAtual);		 
 		return  regiaoRepository.save(regiao);
 	} 
 	
-	public Regiao atualizarRegiao(RegiaoUpdateDto regiaoUpdateDto) {		
+	public Regiao atualizar(RegiaoUpdateDto regiaoUpdateDto) {		
 		Regiao regiao =  modelMapper.map(regiaoUpdateDto, Regiao.class);								
 		regiao.setSituacao(regiaoUpdateDto.getSituacao());
 		regiao.setDataHoraAtualizacao(dataAtual);		 
 		return  regiaoRepository.save(regiao);
 	} 
 		
-	public Regiao excluirRegiao(int idRegiao) {		
+	public Regiao excluir(int idRegiao) {		
 		Regiao regiao =  regiaoRepository.findByIdRegiao(idRegiao);							
 		regiao.setSituacao(Situacao.EXCLUIDO);
 		regiao.setDataHoraExclusao(dataAtual);		 
 		return  regiaoRepository.save(regiao);
 	} 
 	
-	public Regiao obterRegiao(int idRegiao) {		
+	public Regiao obter(int idRegiao) {		
 		return regiaoRepository.findByIdRegiao(idRegiao);		 
 	} 
 		
-	public Iterable<Regiao> listarRegioes() {		
+	public Iterable<Regiao> listar() {		
 		return regiaoRepository.findAll();		 
 	} 
 	
-	public Iterable<Regiao> listarRegioesPorSituacao(int situacao) {		
+	public Iterable<Regiao> listarPorSituacao(int situacao) {		
 		return regiaoRepository.findBySituacao(situacao);
 	} 
 	

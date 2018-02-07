@@ -2,14 +2,13 @@ package org.sadpa.dto;
 
  
 import java.util.List;
-import org.sadpa.models.Municipio;
  
 
 public class RegiaoCreateDto
 {
 	private String nome;
 	private String descricao;
-	private List<Municipio> municipios;
+	private List<MunicipioCreateDto> municipios;
 	
 	public String getNome() {
 		return nome;
@@ -23,10 +22,10 @@ public class RegiaoCreateDto
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public List<Municipio> getMunicipios() {
+	public List<MunicipioCreateDto> getMunicipios() {
 		return municipios;
 	}
-	public void setMunicipios(List<Municipio> municipios) {
+	public void setMunicipios(List<MunicipioCreateDto> municipios) {
 		this.municipios = municipios;
 	}
 	 

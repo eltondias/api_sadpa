@@ -44,7 +44,7 @@ public class InstituicaoFonteService {
 		}
 	}
 	
-	public InstituicaoFonte obterInstituicao(int idInstituicaoFonte) throws Exception {	
+	public InstituicaoFonte obter(int idInstituicaoFonte) throws Exception {	
 		
 		InstituicaoFonte instituicaoFonte = instituicaoFonteRepository.findByIdInstituicaoFonte(idInstituicaoFonte);
 		
@@ -53,7 +53,7 @@ public class InstituicaoFonteService {
 		else return null;
 	}
 	
-	public InstituicaoFonte atualizarInstituicaoFonte(InstituicaoFonteUpdateDto instituicaoFonteNova) throws Exception {			
+	public InstituicaoFonte atualizar(InstituicaoFonteUpdateDto instituicaoFonteNova) throws Exception {			
 		InstituicaoFonte instituicaoFonteAtual =  instituicaoFonteRepository.findByIdInstituicaoFonte(instituicaoFonteNova.getIdInstituicaoFonte());			
 		instituicaoFonteAtual.setCnpj(instituicaoFonteNova.getCnpj());
 		instituicaoFonteAtual.setDescricao(instituicaoFonteNova.getDescricao());
@@ -67,7 +67,7 @@ public class InstituicaoFonteService {
 		return instituicaoFonteRepository.save(instituicaoFonteAtual);			 
 	}
 	
-	public InstituicaoFonte excluirInstituicao(int idInstituicaoFonte) throws Exception {			
+	public InstituicaoFonte excluir(int idInstituicaoFonte) throws Exception {			
 		
 		InstituicaoFonte instituicaoFonteAtual =  instituicaoFonteRepository.findByIdInstituicaoFonte(idInstituicaoFonte);			
 		
@@ -83,11 +83,11 @@ public class InstituicaoFonteService {
 			throw new Exception("Instituição fonte não existe"); 
 	}
 	
-	public Iterable<InstituicaoFonte> listarTodasInstituicoes() throws Exception {		 
+	public Iterable<InstituicaoFonte> listar() throws Exception {		 
 		return instituicaoFonteRepository.findAll();	 
 	}
 	
-	public Iterable<InstituicaoFonte> listarInstituicoesPorSituacao(int situacao ) throws Exception {
+	public Iterable<InstituicaoFonte> listarPorSituacao(int situacao ) throws Exception {
 		
 		Iterable<InstituicaoFonte> listarInstituicoes = instituicaoFonteRepository.findBySituacao(situacao);
 						 
