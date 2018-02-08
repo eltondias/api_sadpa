@@ -62,34 +62,27 @@ public class UsuarioService {
 		return usuarioRepository.save(usuario);
 	}
 		
-	public Iterable<UsuarioReadDto> listar() throws Exception {	
-		
-		 Iterable<Usuario> usuarios = usuarioRepository.findAll();;
-		 
-		 List<UsuarioReadDto> usuariosResposnse =  new ArrayList<UsuarioReadDto>();
-		 
-		 for(  Usuario usuario :usuarios) {
-			 
+	public Iterable<UsuarioReadDto> listar() throws Exception {			
+		 Iterable<Usuario> usuarios = usuarioRepository.findAll();	 		 		
+		 return ConvertListaUsuarioToUsuarioReadDto(usuarios);
+	}
+	
+	public Iterable<UsuarioReadDto> listarPorSituacao(int situacao) throws Exception {	
+		 Iterable<Usuario> usuarios = usuarioRepository.findBySituacao(situacao);
+		 return ConvertListaUsuarioToUsuarioReadDto(usuarios); 
+	}
+	
+	private Iterable<UsuarioReadDto> ConvertListaUsuarioToUsuarioReadDto(Iterable<Usuario> usuarios){				 	 
+		 List<UsuarioReadDto> usuariosResposnse =  new ArrayList<UsuarioReadDto>();		 
+		 for(  Usuario usuario :usuarios) {			 
 			 UsuarioReadDto usuarioResp =  modelMapper.map(usuario, UsuarioReadDto.class);			 
-			 List<CamadaUsuarioDto> camadas =  new ArrayList<CamadaUsuarioDto>();
-			 
+			 List<CamadaUsuarioDto> camadas =  new ArrayList<CamadaUsuarioDto>();			 
 		     for ( Camada camada  : usuario.getCamadas())  	 {			
 					camadas.add(modelMapper.map(camada, CamadaUsuarioDto.class));
-		     }
-				
-			 usuarioResp.setCamadas(camadas);		
-			
-			 usuariosResposnse.add(usuarioResp);
-			 			
-		 }
-		 
-	
-		
+		     }				
+			 usuarioResp.setCamadas(camadas);					
+			 usuariosResposnse.add(usuarioResp);			 			
+		 }		 		
 		return usuariosResposnse;
 	}
-	
-	public Iterable<Usuario> listarPorSituacao(int situacao) throws Exception {		
-		return usuarioRepository.findBySituacao(situacao);
-	}
-	
 }

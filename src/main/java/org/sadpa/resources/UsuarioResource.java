@@ -47,7 +47,7 @@ public class UsuarioResource {
 	}
 	
 	@GetMapping("/PorSituacao/{situacao}")
-	public Iterable<Usuario> listarPorSituacao(@PathVariable(value="situacao") int situacao) throws Exception {			 
+	public Iterable<UsuarioReadDto> listarPorSituacao(@PathVariable(value="situacao") int situacao) throws Exception {			 
 		return service.listarPorSituacao(situacao);		
 	}	
 	
