@@ -7,7 +7,8 @@ public class CamadaCreateDto    {
 	private String nome;		 
 	private String descricao;		 
 	private List<CampoCreateDto> campos;
-		 
+	private List<UsuarioCamadaCreateDto> usuarios;
+	
 	public String getNome() {
 		return nome;
 	}
@@ -26,4 +27,14 @@ public class CamadaCreateDto    {
 	public void setCampos(List<CampoCreateDto> campos) {
 		this.campos = campos;
 	}
+	public List<UsuarioCamadaCreateDto> getUsuarios() {
+		return usuarios;
+	}
+	public void setUsuarios(List<UsuarioCamadaCreateDto> usuarios) {
+		this.usuarios = usuarios;
+	}
+	
+	
+	 
+
 }

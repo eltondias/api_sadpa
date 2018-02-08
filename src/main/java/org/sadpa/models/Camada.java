@@ -1,12 +1,16 @@
 package org.sadpa.models;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.rest.core.annotation.Description;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -34,6 +38,11 @@ public class Camada  {
 	
 	@Description("0 - INATIVA, 1 - ATIVA, 2 - BLOQUEADA, 3 - EXCLUIDA")
 	private int situacao;
+
+	 //@LazyCollection(LazyCollectionOption.FALSE)
+	 @ManyToMany
+	 @JoinTable(joinColumns = { @JoinColumn(name = "idCamada") }, inverseJoinColumns = { @JoinColumn(name = "idUsuario") })
+	 private List<Usuario> usuario;
 
 	public int getIdCamada() {
 		return idCamada;
@@ -74,7 +83,7 @@ public class Camada  {
 	public void setDataHoraAtualizacao(Calendar dataHoraAtualizacao) {
 		this.dataHoraAtualizacao = dataHoraAtualizacao;
 	}
-	
+
 	public Calendar getDataHoraExclusao() {
 		return dataHoraExclusao;
 	}
@@ -90,7 +99,15 @@ public class Camada  {
 	public void setSituacao(int situacao) {
 		this.situacao = situacao;
 	}
-	
-	
-	
+
+	public List<Usuario> getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(List<Usuario> usuario) {
+		this.usuario = usuario;
+	}
+
+	 
+	 
 }

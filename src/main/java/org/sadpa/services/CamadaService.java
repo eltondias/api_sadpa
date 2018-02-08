@@ -13,9 +13,11 @@ import org.sadpa.dto.CamadaUpdateDto;
 import org.sadpa.dto.CampoCreateDto;
 import org.sadpa.dto.CampoReadDto;
 import org.sadpa.dto.CampoUpdateDto;
+import org.sadpa.dto.UsuarioCamadaCreateDto;
 import org.sadpa.models.Camada;
 import org.sadpa.models.Campo;
 import org.sadpa.models.TipoCampo;
+import org.sadpa.models.Usuario;
 import org.sadpa.repositories.CamadaRepository;
 import org.sadpa.repositories.CampoRepository;
 import org.sadpa.repositories.TipoCampoRepository;
@@ -55,6 +57,16 @@ public class CamadaService {
 			Camada camada = modelMapper.map(camadaCreateDto, Camada.class);			
 			camada.setDataHoraInsercao(Calendar.getInstance());
 			camada.setSituacao(Situacao.ATIVO);
+			
+			
+			
+			List<Usuario> usuarios = new ArrayList<Usuario>();
+			
+			for (UsuarioCamadaCreateDto usuario: camadaCreateDto.getUsuarios()) {					 							
+				usuarios.add(modelMapper.map(usuario, Usuario.class));
+			}
+			
+			camada.setUsuario(usuarios);
 			camadaRepository.save(camada);
 
 			//CADASTRO DOS CAMPOS DA CAMADA
@@ -102,7 +114,10 @@ public class CamadaService {
 		for (Campo campo : campos) 
 			camposReadDto.add(modelMapper.map(campo, CampoReadDto.class));
 		
-		camadaResponse.setCampos(camposReadDto);	
+		camadaResponse.setCampos(camposReadDto);
+		
+		camadaResponse.setUsuarios(camada.getUsuario());
+		
 		
 		return camadaResponse;
 	}

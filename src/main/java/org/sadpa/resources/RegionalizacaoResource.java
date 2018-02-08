@@ -46,7 +46,7 @@ public class RegionalizacaoResource {
 	}
 	
 	@GetMapping("/PorSituacao/{situacao}")
-	public Iterable<Regionalizacao> listarRegiaoPorSituacao(@PathVariable(value="situacao") int situacao) throws Exception {			 
+	public Iterable<Regionalizacao> listarPorSituacao(@PathVariable(value="situacao") int situacao) throws Exception {			 
 		return service.listarPorSituacao(situacao);		
 	}	
 	

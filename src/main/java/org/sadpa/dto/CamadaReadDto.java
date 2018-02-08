@@ -3,6 +3,7 @@ package org.sadpa.dto;
 import java.util.Calendar;
 import java.util.List;
 
+import org.sadpa.models.Usuario;
 import org.sadpa.utils.Formata;
 import org.springframework.hateoas.ResourceSupport;
 
@@ -17,6 +18,7 @@ public class CamadaReadDto  extends ResourceSupport {
 	private Calendar dataHoraAtualizacao;
 	private Calendar dataHoraExclusao;
 	private int situacao;	
+	private List<Usuario> usuarios;
 
 	public String getNome() {
 		return nome;
@@ -73,4 +75,12 @@ public class CamadaReadDto  extends ResourceSupport {
 	public void setSituacao(int situacao) {
 		this.situacao = situacao;
 	}
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
+	
+	
 }
