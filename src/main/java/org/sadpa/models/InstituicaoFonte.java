@@ -2,6 +2,7 @@ package org.sadpa.models;
 
 import java.util.Calendar;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +23,7 @@ public class InstituicaoFonte
 	private String nome;
 	
 	@NotBlank
+	@Column(columnDefinition = "TEXT")
 	private String descricao;
 	
 	@NotBlank

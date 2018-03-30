@@ -3,6 +3,7 @@ package org.sadpa.models;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,11 +21,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class Regiao
 {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idRegiao;
 	private String nome;
+	@Column(columnDefinition = "TEXT")
 	private String descricao;
 	private Calendar dataHoraInsercao;	
 	private Calendar dataHoraAtualizacao;	

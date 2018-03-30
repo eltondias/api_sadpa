@@ -1,5 +1,6 @@
 package org.sadpa.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +24,7 @@ public class Regionalizacao
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer idRegionalizacao;
    private String nome;
+   @Column(columnDefinition = "TEXT")
    private String descricao; 
    private Calendar dataHoraInsercao;	
    private Calendar dataHoraAtualizacao;	

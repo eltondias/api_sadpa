@@ -6,6 +6,7 @@ import org.sadpa.dto.CamadaReadDto;
 import org.sadpa.dto.CamadaUpdateDto;
 import org.sadpa.services.CamadaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
+
 @RequestMapping("/camada")
 @Api(description = "Camadas de dados geolocalizados")
 public class CamadaResource {
@@ -60,6 +62,7 @@ public class CamadaResource {
 		return service.listarPorSituacao(situacao);		
 	}	
 	
+	@CrossOrigin(origins = "*")
 	@ApiOperation(value="Lista com todas as camadas")
 	@GetMapping(value = "/", produces = "application/json; charset=UTF-8")
 	public @ResponseBody Iterable<CamadaReadDto> listar() throws Exception {			 
