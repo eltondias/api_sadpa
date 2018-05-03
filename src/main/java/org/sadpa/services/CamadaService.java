@@ -50,7 +50,13 @@ public class CamadaService {
 	public CamadaReadDto cadastrar(CamadaCreateDto camadaCreateDto) throws Exception {
 
 		try {
-			 			
+			
+			for (CampoCreateDto  item: camadaCreateDto.getCampos()) {
+				System.out.println("Nome:" + item.getNome() + " - titulo:" + item.isTitulo());
+			}
+			
+			
+			
 			verificaNomeCamada(camadaCreateDto.getNome());		 													
 			verificaTipoCampos(camadaCreateDto.getCampos());
 									
@@ -76,7 +82,7 @@ public class CamadaService {
 				Campo campo =  new Campo();
 				campo.setNome(campoCreateDto.getNome());
 				campo.setObrigatorio(campoCreateDto.isObrigatorio());
-				campo.setObrigatorio(campoCreateDto.isTitulo());				
+				campo.setTitulo(campoCreateDto.isTitulo());				
 				campo.setTipoCampo(tipoCampoRepository.findByIdTipoCampo(campoCreateDto.getTipoCampo().getIdTipoCampo()));
 				campo.setCamada(camada);											 			 				 				
 				campo.setDataHoraInsercao(Calendar.getInstance());	

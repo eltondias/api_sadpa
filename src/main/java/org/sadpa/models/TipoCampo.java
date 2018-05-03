@@ -25,7 +25,4 @@ public class TipoCampo {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
-	
-	
 }

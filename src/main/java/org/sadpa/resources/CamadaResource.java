@@ -30,6 +30,7 @@ public class CamadaResource {
 	@Autowired
 	private CamadaService service;
 	
+	@CrossOrigin(origins = "*")
 	@ApiOperation(value="Cadastra uma nova camada e seus campos")
 	@PostMapping()
 	public CamadaReadDto cadastrar(@RequestBody @Valid CamadaCreateDto camada) throws Exception{								
@@ -55,7 +56,7 @@ public class CamadaResource {
 		return service.excluir(idCamada);
 	}
 	
-	
+	@CrossOrigin(origins = "*")
 	@ApiOperation(value="Lista camadas por situação (0 - INATIVA, 1 - ATIVA, 2 - BLOQUEADA, 3 - EXCLUIDA)")
 	@GetMapping(value="/PorSituacao/{situacao}", produces="application/json")
 	public @ResponseBody Iterable<CamadaReadDto> listarPorSituacao(@PathVariable(value="situacao") int situacao) throws Exception {			 
