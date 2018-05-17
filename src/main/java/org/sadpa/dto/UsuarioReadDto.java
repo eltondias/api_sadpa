@@ -2,9 +2,6 @@ package org.sadpa.dto;
 
 import java.util.List;
 
-import org.sadpa.models.Camada;
- 
-
 public class UsuarioReadDto
 {	 
 	private int idUsuario;
