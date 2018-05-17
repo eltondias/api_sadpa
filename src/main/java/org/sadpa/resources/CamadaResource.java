@@ -4,6 +4,7 @@ import javax.validation.Valid;
 import org.sadpa.dto.CamadaCreateDto;
 import org.sadpa.dto.CamadaReadDto;
 import org.sadpa.dto.CamadaUpdateDto;
+import org.sadpa.models.SituacaoCamada;
 import org.sadpa.services.CamadaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -37,19 +38,21 @@ public class CamadaResource {
 		return service.cadastrar(camada);
 	}
 	
+	@CrossOrigin(origins = "*")
 	@ApiOperation(value="Obtem uma camada pelo id da camada")
 	@GetMapping(value="/{idCamada}", produces="application/json")
 	public @ResponseBody CamadaReadDto obter(@PathVariable(value="idCamada") int idCamada) throws Exception{		 	 
 		return service.obter(idCamada);
 	}
 		
+	@CrossOrigin(origins = "*")
 	@ApiOperation(value="Atualiza uma camada")
 	@PutMapping(value="/", produces="application/json")
 	public @ResponseBody CamadaReadDto  atualizar(@RequestBody @Valid CamadaUpdateDto camadaUpdateDto) throws Exception{			
 		return service.atualizar(camadaUpdateDto);
 	}
 	
-	
+	@CrossOrigin(origins = "*")
 	@ApiOperation(value="Excluir uma camada")
 	@DeleteMapping(value="/", produces="application/json")
 	public @ResponseBody CamadaReadDto  excluir(@RequestParam(value="idCamada") int idCamada) throws Exception{			
@@ -61,7 +64,7 @@ public class CamadaResource {
 	@GetMapping(value="/PorSituacao/{situacao}", produces="application/json")
 	public @ResponseBody Iterable<CamadaReadDto> listarPorSituacao(@PathVariable(value="situacao") int situacao) throws Exception {			 
 		return service.listarPorSituacao(situacao);		
-	}	
+	}		
 	
 	@CrossOrigin(origins = "*")
 	@ApiOperation(value="Lista com todas as camadas")
@@ -72,7 +75,12 @@ public class CamadaResource {
 	
 	
 	
-	
+	@CrossOrigin(origins = "*")
+	@ApiOperation(value="Obtem situações de uma camada")
+	@GetMapping(value="/situacoesCamada", produces="application/json")
+	public @ResponseBody Iterable<SituacaoCamada> situacoesCamada() throws Exception{		 	 
+		return service.situacoesCamada();
+	}
 	
 	
 	

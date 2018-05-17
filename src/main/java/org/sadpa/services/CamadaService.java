@@ -3,6 +3,7 @@ package org.sadpa.services;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import org.modelmapper.ModelMapper;
@@ -16,6 +17,7 @@ import org.sadpa.dto.CampoUpdateDto;
 import org.sadpa.dto.UsuarioCamadaCreateDto;
 import org.sadpa.models.Camada;
 import org.sadpa.models.Campo;
+import org.sadpa.models.SituacaoCamada;
 import org.sadpa.models.TipoCampo;
 import org.sadpa.models.Usuario;
 import org.sadpa.repositories.CamadaRepository;
@@ -222,13 +224,13 @@ public class CamadaService {
 	
 	public Iterable<CamadaReadDto> listarPorSituacao(int situacao ) throws Exception {
 				
-		Iterable<Camada> listaCamadas = camadaRepository.findBySituacao(situacao);
+		Iterable<Camada> listaCamadas = camadaRepository.findBySituacaoAndOrder(situacao);
 				
 		ArrayList<CamadaReadDto> camadas = new ArrayList<CamadaReadDto>();
 		
 		for (Camada camada : listaCamadas) {	
 			
-			 List<Campo> camposCamada = campoRepository.findByCamada(camada);
+			 List<Campo> camposCamada = campoRepository.findByCamadaAndSituacao(camada, 2);
 			 List<CampoReadDto> campos = new ArrayList<CampoReadDto>();
 			 
 			 for (Campo campo : camposCamada) 				 
@@ -282,5 +284,23 @@ public class CamadaService {
 		 
 	}
 	
+	
+	public Iterable<SituacaoCamada> situacoesCamada() throws Exception {
+				 				
+		ArrayList<SituacaoCamada> situacoes = new ArrayList<SituacaoCamada>(
+				Arrays.asList(						
+						new SituacaoCamada(0, "Inativa"), 
+						new SituacaoCamada(1, "Ativa"), 
+						new SituacaoCamada(2, "Bloqueada"), 
+						new SituacaoCamada(3, "Excluída")					 						
+						)
+		);
+						
+		return situacoes;
+	}
+	
+	
 	 
 }
+
+

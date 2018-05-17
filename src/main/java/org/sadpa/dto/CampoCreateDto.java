@@ -5,18 +5,12 @@ import org.sadpa.dto.TipoCampoCreateDto;
 
 public class CampoCreateDto {
 	
-	//private int idCampo;	
 	private String nome;
 	private boolean titulo;	
 	private boolean obrigatorio;				
-	private TipoCampoCreateDto tipoCampo;	
+	private int situacao;  
+	private TipoCampoCreateDto tipoCampo;
 	
-	/*public int getIdCampo() {
-		return idCampo;
-	}
-	public void setIdCampo(int idCampo) {
-		this.idCampo = idCampo;
-	}*/
 	public String getNome() {
 		return nome;
 	}
@@ -35,10 +29,16 @@ public class CampoCreateDto {
 	public void setObrigatorio(boolean obrigatorio) {
 		this.obrigatorio = obrigatorio;
 	}
+	public int getSituacao() {
+		return situacao;
+	}
+	public void setSituacao(int situacao) {
+		this.situacao = situacao;
+	}
 	public TipoCampoCreateDto getTipoCampo() {
 		return tipoCampo;
 	}
 	public void setTipoCampo(TipoCampoCreateDto tipoCampo) {
 		this.tipoCampo = tipoCampo;
-	}
+	}	
 }
