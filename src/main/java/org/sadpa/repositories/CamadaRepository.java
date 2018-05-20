@@ -10,7 +10,9 @@ import org.springframework.data.repository.query.Param;
 public interface CamadaRepository extends JpaRepository<Camada, String> {
 	
 	Camada findByIdCamada(int idCamada);
-	List<Camada> findByNome(String nome);
+	
+	@Query("select c from Camada c where  c.nome = :nome and c.situacao <> 3 ")
+	List<Camada> findByNome(  @Param("nome") String nome);
 	Iterable<Camada> findBySituacao(int situacao);
 	
 	@Query("select c from Camada c where c.situacao = :situacao order by idCamada asc")

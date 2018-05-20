@@ -269,7 +269,7 @@ public class CamadaService {
 	private void  verificaNomeCamada(String nome) throws Exception {
 		
 		List<Camada> camadaNome =  camadaRepository.findByNome(nome);			
-		if(camadaNome.size() > 0) 				 
+		if(camadaNome.size() > 0 ) 				 
 			throw new Exception("Já existe uma camada cadastrada com o nome: " + nome); 		
 	}
 	
@@ -289,10 +289,10 @@ public class CamadaService {
 				 				
 		ArrayList<SituacaoCamada> situacoes = new ArrayList<SituacaoCamada>(
 				Arrays.asList(						
-						new SituacaoCamada(0, "Inativa"), 
-						new SituacaoCamada(1, "Ativa"), 
-						new SituacaoCamada(2, "Bloqueada"), 
-						new SituacaoCamada(3, "Excluída")					 						
+						new SituacaoCamada(0, "Inativa")
+						,new SituacaoCamada(1, "Ativa")
+						//,new SituacaoCamada(2, "Bloqueada") 
+						//,new SituacaoCamada(3, "Excluída")					 						
 						)
 		);
 						
