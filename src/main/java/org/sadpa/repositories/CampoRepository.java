@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface CampoRepository extends JpaRepository<Campo, String> {
 	
+	
 	  Campo findByIdCampo(int IdCampo);
 	
 	  List<Campo> findByCamada(Camada camada);
