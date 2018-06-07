@@ -1,6 +1,6 @@
 package org.sadpa.resources;
+ 
 import javax.validation.Valid;
-
 import org.sadpa.dto.CamadaCreateDto;
 import org.sadpa.dto.CamadaReadDto;
 import org.sadpa.dto.CamadaUpdateDto;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -54,8 +53,8 @@ public class CamadaResource {
 	
 	@CrossOrigin(origins = "*")
 	@ApiOperation(value="Excluir uma camada")
-	@DeleteMapping(value="/", produces="application/json")
-	public @ResponseBody CamadaReadDto  excluir(@RequestParam(value="idCamada") int idCamada) throws Exception{			
+	@DeleteMapping(value="/{idCamada}", produces="application/json")
+	public @ResponseBody CamadaReadDto  excluir(@PathVariable(value="idCamada") int idCamada) throws Exception{			
 		return service.excluir(idCamada);
 	}
 	
@@ -69,12 +68,10 @@ public class CamadaResource {
 	@CrossOrigin(origins = "*")
 	@ApiOperation(value="Lista com todas as camadas")
 	@GetMapping(value = "/", produces = "application/json; charset=UTF-8")
-	public @ResponseBody Iterable<CamadaReadDto> listar() throws Exception {			 
+	public @ResponseBody Iterable<CamadaReadDto> listar() throws Exception {
 		return service.listar();		
 	}	
-	
-	
-	
+			
 	@CrossOrigin(origins = "*")
 	@ApiOperation(value="Obtem situações de uma camada")
 	@GetMapping(value="/situacoesCamada", produces="application/json")
