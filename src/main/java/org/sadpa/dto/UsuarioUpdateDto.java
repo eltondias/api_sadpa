@@ -27,7 +27,7 @@ public class UsuarioUpdateDto
 		return senha;
 	}
 	public void setSenha(String senha) {
-		this.senha = Criptografia.Cripto(senha);
+		this.senha = senha;
 	}
 	public String getEmail() {
 		return email;

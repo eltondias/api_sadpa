@@ -21,13 +21,12 @@ public class Municipio
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer idMunicipio;
    private String nome;
-   @ManyToOne
-   @JoinColumn(name = "idEstado")
-   private Estado estado;
    private String latitude;
    private String longitude;
    
-  
+   @ManyToOne
+   @JoinColumn(name = "idEstado")
+   private Estado estado;
    
    @ManyToMany
    @JoinTable(joinColumns = { @JoinColumn(name = "idMunicipio") }, inverseJoinColumns = { @JoinColumn(name = "idRegiao") })

@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.sadpa.utils.Formata;
 import org.springframework.data.rest.core.annotation.Description;
 
 @Entity
@@ -78,24 +79,24 @@ public class InstituicaoFonte
 		this.situacao = situacao;
 	}
 
-	public Calendar getDataHoraInsercao() {
-		return dataHoraInsercao;
+	public String getDataHoraInsercao() {
+		return Formata.DataTime(dataHoraInsercao);
 	}
 
 	public void setDataHoraInsercao(Calendar dataHoraInsercao) {
 		this.dataHoraInsercao = dataHoraInsercao;
 	}
 
-	public Calendar getDataHoraAtualizacao() {
-		return dataHoraAtualizacao;
+	public String getDataHoraAtualizacao() {
+		return  Formata.DataTime(dataHoraAtualizacao);
 	}
 
 	public void setDataHoraAtualizacao(Calendar dataHoraAtualizacao) {
 		this.dataHoraAtualizacao = dataHoraAtualizacao;
 	}
 
-	public Calendar getDataHoraExclusao() {
-		return dataHoraExclusao;
+	public String getDataHoraExclusao() {
+		return Formata.DataTime(dataHoraExclusao);
 	}
 
 	public void setDataHoraExclusao(Calendar dataHoraExclusao) {

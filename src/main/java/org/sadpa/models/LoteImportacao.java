@@ -1,12 +1,15 @@
 package org.sadpa.models;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -17,9 +20,21 @@ public class LoteImportacao
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idLoteImportacao;
 	private Calendar dataHora;
-	@ManyToOne
-	@JoinColumn(name = "idUsuario")
-	private Usuario usuario;
+	
+	
+	 @ManyToMany
+	 @JoinTable(joinColumns = { @JoinColumn(name = "idLoteImportacao") }, inverseJoinColumns = { @JoinColumn(name = "idUsuario") })
+	 private List<Usuario> usuario;
+	
+	 
+	 
+	
+	public List<Usuario> getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(List<Usuario> usuario) {
+		this.usuario = usuario;
+	}
 	private Integer status;
 	
 	public Integer getIdLoteImportacao() {
@@ -34,12 +49,7 @@ public class LoteImportacao
 	public void setDataHora(Calendar dataHora) {
 		this.dataHora = dataHora;
 	}
-	public Usuario getUsuario() {
-		return usuario;
-	}
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
+	 
 	public Integer getStatus() {
 		return status;
 	}

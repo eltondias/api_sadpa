@@ -1,5 +1,7 @@
 package org.sadpa.services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -53,11 +55,16 @@ public class RegionalizacaoService {
 		return regionalizacaoRepository.findByIdRegionalizacao(idRegionalizacao);		
 	}
 	
-	public Regionalizacao atualizar(RegionalizacaoUpdateDto regionalizacaoUpdateDto) {					
+	public Regionalizacao atualizar(RegionalizacaoUpdateDto regionalizacaoUpdateDto) throws ParseException {					
 		Regionalizacao regionalizacaoAtual = regionalizacaoRepository.findByIdRegionalizacao(regionalizacaoUpdateDto.getIdRegionalizacao());		
 		Regionalizacao regionalizacao =  modelMapper.map(regionalizacaoUpdateDto, Regionalizacao.class);		
 		regionalizacao.setDataHoraAtualizacao(Calendar.getInstance());	
-		regionalizacao.setDataHoraInsercao(regionalizacaoAtual.getDataHoraInsercao());
+		
+			 
+		Calendar dataHoraInsercao = Calendar.getInstance();
+		dataHoraInsercao.setTime((new SimpleDateFormat("dd/MM/yyyy")).parse(regionalizacaoAtual.getDataHoraInsercao()));
+		
+		regionalizacao.setDataHoraInsercao(dataHoraInsercao);
 		return regionalizacaoRepository.save(regionalizacao);		
 	}
 

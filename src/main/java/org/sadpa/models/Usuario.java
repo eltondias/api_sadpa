@@ -32,6 +32,13 @@ public class Usuario
 	              inverseJoinColumns = { @JoinColumn(name = "idCamada") })
 	// @JsonIgnore
 	 private List<Camada> camadas;
+	 
+	 @ManyToMany
+	 @JoinTable(name = "loteimportacao_usuario", 
+	              joinColumns = { @JoinColumn(name = "idUsuario") }, 
+	              inverseJoinColumns = { @JoinColumn(name = "idLoteImportacao") })
+	 private List<LoteImportacao> lotesImportacao;
+	 
 
 	public Integer getIdUsuario() {
 		return idUsuario;
@@ -113,6 +120,13 @@ public class Usuario
 		this.camadas = camadas;
 	}
 
+	public List<LoteImportacao> getLotesImportacao() {
+		return lotesImportacao;
+	}
+
+	public void setLotesImportacao(List<LoteImportacao> lotesImportacao) {
+		this.lotesImportacao = lotesImportacao;
+	}
 	
 }
 

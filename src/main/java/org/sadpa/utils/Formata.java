@@ -8,7 +8,7 @@ public class Formata {
 		
 	public static String DataTime(Calendar DataTime ){				
 		if(DataTime!=null){
-			SimpleDateFormat formato = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");				
+			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");				
 			return formato.format(DataTime.getTime());	
 		}else return null;		
 	}
@@ -16,7 +16,7 @@ public class Formata {
 	
 	public static String Data(Date Data){				
 		if(Data!=null){
-			SimpleDateFormat formato = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");				
+			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");				
 			return formato.format(Data.getTime());	
 		}else return null;		
 	}

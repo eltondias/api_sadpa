@@ -1,7 +1,6 @@
 package org.sadpa.services;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +67,11 @@ public class ImportacaoService {
 
 		LoteImportacao loteImportacao = new LoteImportacao();
 		loteImportacao.setDataHora(DataHora.getDataHora());
-		loteImportacao.setUsuario(usuario);
+		
+		List<Usuario> usuarios = new ArrayList<Usuario>();
+		usuarios.add(usuario);
+		
+		loteImportacao.setUsuario(usuarios);
 		loteImportacao.setStatus(1);
 		loteImportacaoRepository.save(loteImportacao);
 

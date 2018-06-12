@@ -14,6 +14,7 @@ import org.sadpa.dto.UsuarioUpdateDto;
 import org.sadpa.models.Camada;
 import org.sadpa.models.Usuario;
 import org.sadpa.repositories.UsuarioRepository;
+import org.sadpa.utils.Criptografia;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,10 +48,17 @@ public class UsuarioService {
 		return usuarioResponse;		
 	}
 	
-	public Usuario atualizar(UsuarioUpdateDto usuarioUpdateDto) {						
+	public Usuario atualizar(UsuarioUpdateDto usuarioUpdateDto) {
+		
+		Usuario usuarioAtual = usuarioRepository.findByIdUsuario(usuarioUpdateDto.getIdUsuario());	
+		
+	 
+		if(!usuarioUpdateDto.getSenha().contains(usuarioAtual.getSenha()))
+			usuarioUpdateDto.setSenha(Criptografia.Cripto(usuarioUpdateDto.getSenha()));
+		
 		Usuario usuario =  modelMapper.map(usuarioUpdateDto, Usuario.class);		
 		usuario.setDataHoraAtualizacao(Calendar.getInstance());	
-		Usuario usuarioAtual = usuarioRepository.findByIdUsuario(usuarioUpdateDto.getIdUsuario());	
+		
 		usuario.setDataHoraInsercao(usuarioAtual.getDataHoraInsercao());
 		return usuarioRepository.save(usuario);		
 	}
@@ -85,4 +93,12 @@ public class UsuarioService {
 		 }		 		
 		return usuariosResposnse;
 	}
+	
+	public String descriptografar(String senhaCripografada){				 	 
+		 
+		return Criptografia.Decripto(senhaCripografada);
+	}
+	
+	
+	
 }

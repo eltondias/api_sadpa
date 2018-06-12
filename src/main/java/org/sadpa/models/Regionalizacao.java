@@ -11,6 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.sadpa.utils.Formata;
 import org.springframework.data.rest.core.annotation.Description;
 
 import java.util.Calendar;
@@ -65,26 +66,26 @@ public class Regionalizacao
 		this.descricao = descricao;
 	}
 
-	public Calendar getDataHoraInsercao() {
-		return dataHoraInsercao;
+	public String getDataHoraInsercao() {
+		return Formata.DataTime(dataHoraInsercao);
 	}
-	
+
 	public void setDataHoraInsercao(Calendar dataHoraInsercao) {
 		this.dataHoraInsercao = dataHoraInsercao;
 	}
-	
-	public Calendar getDataHoraAtualizacao() {
-		return dataHoraAtualizacao;
+
+	public String getDataHoraAtualizacao() {
+		return  Formata.DataTime(dataHoraAtualizacao);
 	}
-	
+
 	public void setDataHoraAtualizacao(Calendar dataHoraAtualizacao) {
 		this.dataHoraAtualizacao = dataHoraAtualizacao;
 	}
-	
-	public Calendar getDataHoraExclusao() {
-		return dataHoraExclusao;
+
+	public String getDataHoraExclusao() {
+		return Formata.DataTime(dataHoraExclusao);
 	}
-	
+
 	public void setDataHoraExclusao(Calendar dataHoraExclusao) {
 		this.dataHoraExclusao = dataHoraExclusao;
 	}
