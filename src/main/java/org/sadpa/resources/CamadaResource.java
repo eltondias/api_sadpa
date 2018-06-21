@@ -1,9 +1,12 @@
 package org.sadpa.resources;
  
+
 import javax.validation.Valid;
 import org.sadpa.dto.CamadaCreateDto;
 import org.sadpa.dto.CamadaReadDto;
 import org.sadpa.dto.CamadaUpdateDto;
+import org.sadpa.dto.DadosGeodadoDto;
+import org.sadpa.dto.FiltroDados;
 import org.sadpa.models.SituacaoCamada;
 import org.sadpa.services.CamadaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,18 +82,12 @@ public class CamadaResource {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@CrossOrigin(origins = "*")
+	@ApiOperation(value="Obtem dados da camada")
+	@PostMapping(value="/dadosCamada", produces="application/json")
+	public @ResponseBody Iterable<DadosGeodadoDto> dadosCamada(@RequestBody FiltroDados filtroDados) throws Exception{		 	 
+		return service.dadosCamada(filtroDados);
+	}
 	
 	
 }

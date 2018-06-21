@@ -14,15 +14,23 @@ import org.sadpa.dto.CamadaUpdateDto;
 import org.sadpa.dto.CampoCreateDto;
 import org.sadpa.dto.CampoReadDto;
 import org.sadpa.dto.CampoUpdateDto;
+import org.sadpa.dto.DadosGeodadoDto;
+import org.sadpa.dto.FiltroDados;
+import org.sadpa.dto.GeodadoReadDto;
 import org.sadpa.dto.UsuarioCamadaCreateDto;
+import org.sadpa.dto.ValorCampoReadDto;
 import org.sadpa.models.Camada;
 import org.sadpa.models.Campo;
+import org.sadpa.models.Geodado;
 import org.sadpa.models.SituacaoCamada;
 import org.sadpa.models.TipoCampo;
 import org.sadpa.models.Usuario;
+import org.sadpa.models.ValorCampo;
 import org.sadpa.repositories.CamadaRepository;
 import org.sadpa.repositories.CampoRepository;
+import org.sadpa.repositories.GeodadoRepository;
 import org.sadpa.repositories.TipoCampoRepository;
+import org.sadpa.repositories.ValorCampoRepository;
 import org.sadpa.resources.CamadaResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +51,14 @@ public class CamadaService {
 	@Autowired
 	private TipoCampoRepository tipoCampoRepository;
 
- 
+	@Autowired
+	private GeodadoRepository geodadoRepository;
+	
+	
+	@Autowired
+	private ValorCampoRepository valorCampoRepository;
+	
+	
 		
 	private static CamadaReadDto responseCamadaReadDto = null;
 
@@ -298,6 +313,34 @@ public class CamadaService {
 						
 		return situacoes;
 	}
+	
+	public List<DadosGeodadoDto> dadosCamada(FiltroDados filtroDados) throws Exception {
+		
+		List<DadosGeodadoDto> dados = new ArrayList<DadosGeodadoDto>();
+		
+		 for (Integer idCamada : filtroDados.getCamadas()) {	
+			 
+			 	Iterable<Geodado> geodadosCamada =  geodadoRepository.findByCamada(camadaRepository.findByIdCamada(idCamada));				 
+			 	for (Geodado geodado : geodadosCamada) {					
+			 		DadosGeodadoDto dadosGeodado = new DadosGeodadoDto();	
+			 		
+			 		dadosGeodado.setGeodado(modelMapper.map(geodado, GeodadoReadDto.class));	
+			 		
+			 		Iterable<ValorCampo> valores  = valorCampoRepository.findByGeodado(geodado);
+			 		
+			 		List<ValorCampoReadDto> novosValores =  new ArrayList<ValorCampoReadDto>();			 		
+			 		for (ValorCampo valorCampo : valores) {			 		
+			 			novosValores.add(modelMapper.map(valorCampo,ValorCampoReadDto.class));
+					}
+			 					 		
+			 		dadosGeodado.setValorCampos(novosValores);
+			 		dados.add(dadosGeodado);
+				}
+		 }
+		 		 
+		 return dados; 			
+	}
+	
 	
 	
 	 

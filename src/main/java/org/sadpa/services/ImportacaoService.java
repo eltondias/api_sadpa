@@ -7,19 +7,17 @@ import java.util.Map;
 import org.sadpa.dto.ImportacaoCreateDto;
 import org.sadpa.models.Camada;
 import org.sadpa.models.Campo;
-import org.sadpa.models.CampoInserido;
+import org.sadpa.models.ValorCampo;
 import org.sadpa.models.Geodado;
 import org.sadpa.models.InstituicaoFonte;
-import org.sadpa.models.ItemCamada;
 import org.sadpa.models.LoteImportacao;
 import org.sadpa.models.Municipio;
 import org.sadpa.models.Usuario;
 import org.sadpa.repositories.CamadaRepository;
-import org.sadpa.repositories.CampoInseridoRepository;
+import org.sadpa.repositories.ValorCampoRepository;
 import org.sadpa.repositories.CampoRepository;
 import org.sadpa.repositories.GeodadoRepository;
 import org.sadpa.repositories.InstituicaoFonteRepository;
-import org.sadpa.repositories.ItemCamadaRepository;
 import org.sadpa.repositories.LoteImportacaoRepository;
 import org.sadpa.repositories.MunicipioRepository;
 import org.sadpa.repositories.UsuarioRepository;
@@ -52,10 +50,7 @@ public class ImportacaoService {
 	private LoteImportacaoRepository loteImportacaoRepository;
 
 	@Autowired
-	private ItemCamadaRepository itemCamadaRepository;
-
-	@Autowired
-	private CampoInseridoRepository campoInseridoRepository;
+	private ValorCampoRepository ValorCampoRepository;
 
 	public void importar(ImportacaoCreateDto importacaoCreateDto) throws Exception {
 
@@ -77,16 +72,12 @@ public class ImportacaoService {
 
 		for (Map<String, Object> valoresItemCamada : importacaoCreateDto.getLista()) {
 		 			
-			ItemCamada itemCamada = new ItemCamada();
-			itemCamada.setCamada(camada);
-			itemCamadaRepository.save(itemCamada);
-
 			Geodado geodado = new Geodado();
-			geodado.setAtividadeEconomica(null); // TODO: incluir depois		
+			geodado.setAtividadeEconomica(null); // TODO: incluir depois	
+			geodado.setCamada(camada);
 			geodado.setDataHoraInsercao(DataHora.getDataHora());
 			geodado.setInstituicaoFonte(instituicaoFonte);
-			geodado.setMunicipio(municipio);
-			geodado.setItemCamada(itemCamada);
+			geodado.setMunicipio(municipio);		
 			geodado.setLoteImportacao(loteImportacao);
 			geodado.setUsuario(usuario);
 			geodadoRepository.save(geodado);
@@ -98,22 +89,20 @@ public class ImportacaoService {
 			 Arrays.fill(controle, false);*/
 			 
 			
-			for (Map.Entry<String, Object> valorCampo : map.entrySet()) {	
+			for (Map.Entry<String, Object> valor : map.entrySet()) {	
 				
-				Campo campo =  getCampoCamada(valorCampo.getKey(), campos);
-			
-				//campoInseridoRepository.findByCamposInseridos(campo,  valorCampo.getValue().toString());
-				
+				Campo campo =  getCampoCamada(valor.getKey(), campos);
+		 
 				
 				if(campo != null) {
 									
-					CampoInserido campoInserido = new CampoInserido();
-					campoInserido.setAtivo(true);
-					campoInserido.setCampo(campo);
-					campoInserido.setValor(valorCampo.getValue().toString());
-					campoInserido.setItemCamada(itemCamada);
-					campoInseridoRepository.save(campoInserido);
-					System.out.print(valorCampo.getKey() + ": " + valorCampo.getValue()+ "; ");
+					ValorCampo valorCampo = new ValorCampo();
+					valorCampo.setSituacao(1);
+					valorCampo.setCampo(campo);
+					valorCampo.setValor(valor.getValue().toString());
+					valorCampo.setGeodado(geodado);
+					ValorCampoRepository.save(valorCampo);
+					System.out.print(valor.getKey() + ": " + valor.getValue()+ "; ");
 				}								
 			}
 			

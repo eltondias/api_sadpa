@@ -1,8 +1,6 @@
 package org.sadpa.models;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,19 +14,23 @@ public class Geodado
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer idGeodado;
-	private Calendar dataHoraInsercao;
-	private Calendar dataHoraModificacao;
+	private Integer idGeodado;	
 	private String latitude;
 	private String longitude;
+	private Calendar dataHoraInsercao;	
+	private Calendar dataHoraAtualizacao;	
+	private Calendar dataHoraExclusao;
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "idCamada")
+	private Camada camada;
+	
 
 	@ManyToOne
 	@JoinColumn(name = "idInstituicaoFonte")
 	private InstituicaoFonte instituicaoFonte;
 	
-	@ManyToOne
-	@JoinColumn(name = "idItemCamada")
-	private ItemCamada itemCamada;
 
 	@ManyToOne
 	@JoinColumn(name = "idMunicipio")
@@ -54,34 +56,60 @@ public class Geodado
 		this.idGeodado = idGeodado;
 	}
 
-	public String getDataHoraInsercao() {
-		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");				
-		return formato.format(dataHoraInsercao.getTime());
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+	public Calendar getDataHoraInsercao() {
+		return dataHoraInsercao;
 	}
 
 	public void setDataHoraInsercao(Calendar dataHoraInsercao) {
 		this.dataHoraInsercao = dataHoraInsercao;
 	}
 
-	public String getDataHoraModificacao() {
-		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");				
-		return formato.format(dataHoraModificacao.getTime());
+	public Calendar getDataHoraAtualizacao() {
+		return dataHoraAtualizacao;
 	}
 
-	public void setDataHoraModificacao(Calendar dataHoraModificacao) {
-		this.dataHoraModificacao = dataHoraModificacao;
+	public void setDataHoraAtualizacao(Calendar dataHoraAtualizacao) {
+		this.dataHoraAtualizacao = dataHoraAtualizacao;
+	}
+
+	public Calendar getDataHoraExclusao() {
+		return dataHoraExclusao;
+	}
+
+	public void setDataHoraExclusao(Calendar dataHoraExclusao) {
+		this.dataHoraExclusao = dataHoraExclusao;
+	}
+
+	public Camada getCamada() {
+		return camada;
+	}
+
+	public void setCamada(Camada camada) {
+		this.camada = camada;
+	}
+
+	public InstituicaoFonte getInstituicaoFonte() {
+		return instituicaoFonte;
 	}
 
 	public void setInstituicaoFonte(InstituicaoFonte instituicaoFonte) {
 		this.instituicaoFonte = instituicaoFonte;
-	}
-
-	public ItemCamada getItemCamada() {
-		return itemCamada;
-	}
-
-	public void setItemCamada(ItemCamada itemCamada) {
-		this.itemCamada = itemCamada;
 	}
 
 	public Municipio getMunicipio() {
@@ -115,21 +143,4 @@ public class Geodado
 	public void setAtividadeEconomica(AtividadeEconomica atividadeEconomica) {
 		this.atividadeEconomica = atividadeEconomica;
 	}
-
-	public String getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
-	}
-
-	public String getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
-	}
-	
 }
