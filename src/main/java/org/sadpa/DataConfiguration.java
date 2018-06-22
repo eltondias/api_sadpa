@@ -14,7 +14,7 @@ public class DataConfiguration {
 
 	
 	
-	@Bean
+	/*@Bean
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
@@ -22,10 +22,10 @@ public class DataConfiguration {
         dataSource.setUsername("postgres");
         dataSource.setPassword("postgres");
         return dataSource;
-    }
+    }*/
 	
 	
-	/*
+	
 	 @Bean
 	    public DataSource dataSource(){
 	        DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -35,19 +35,9 @@ public class DataConfiguration {
 	        dataSource.setPassword("cf475e86b268648374097931fadddd3e7514f2ee909927f9707847077aa834fd");
 	        return dataSource;
 	    }
-	*/
+	
 	 
-	
-	
-	/*@Bean
-    public DataSource dataSource(){
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://baasu.db.elephantsql.com:5432/iqgyctkx");
-        dataSource.setUsername("iqgyctkx");
-        dataSource.setPassword("v0e2SbqY3k5rauOftWgC9AU0wG8sjL0m");
-        return dataSource;
-    }*/
+
 	
 	@Bean
 	public JpaVendorAdapter jpaVendorAdapter(){
@@ -60,25 +50,6 @@ public class DataConfiguration {
 		return adapter;
 	}
 	
-	/*@Bean
-    public DataSource dataSource(){
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/api_sadpa_nova");
-        dataSource.setUsername("root");
-        dataSource.setPassword("root");
-        return dataSource;
-    }
 	
-	@Bean
-	public JpaVendorAdapter jpaVendorAdapter(){
-		HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
-		adapter.setDatabase(Database.MYSQL);
-		adapter.setShowSql(true);
-		adapter.setGenerateDdl(true);
-		adapter.setDatabasePlatform("org.hibernate.dialect.MySQLDialect");
-		adapter.setPrepareConnection(true);
-		return adapter;
-	}*/
 }
 
