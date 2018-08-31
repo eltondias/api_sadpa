@@ -77,10 +77,12 @@ public class ImportacaoService {
 			geodado.setCamada(camada);
 			geodado.setDataHoraInsercao(DataHora.getDataHora());
 			geodado.setInstituicaoFonte(instituicaoFonte);
+			
+		
 			geodado.setMunicipio(municipio);		
 			geodado.setLoteImportacao(loteImportacao);
 			geodado.setUsuario(usuario);
-			geodadoRepository.save(geodado);
+			Geodado geodadoRet =   geodadoRepository.save(geodado);
 
 			Map<String, Object> map = (new HashMap<String, Object>());
 			map.putAll(valoresItemCamada);
@@ -93,6 +95,20 @@ public class ImportacaoService {
 				
 				Campo campo =  getCampoCamada(valor.getKey(), campos);
 		 
+				if(campo != null) {
+					if(campo.getTipoCampo().getNome().contains("Latitude")) {
+						geodado.setLatitude(valor.getValue().toString());
+						geodadoRepository.save(geodado);
+					}
+					
+					if(campo.getTipoCampo().getNome().contains("Longitude")) {
+						geodado.setLongitude(valor.getValue().toString());
+						geodadoRepository.save(geodado);
+					}
+				}
+						
+			
+				
 				
 				if(campo != null) {
 									
